@@ -16,6 +16,46 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@lib/databases": [
+        "libs/databases/src"
+      ],
+      "@lib/databases/*": [
+        "libs/databases/src/*"
+      ],
+      "@lib/providers": [
+        "libs/providers/src"
+      ],
+      "@lib/providers/*": [
+        "libs/providers/src/*"
+      ],
+      "@lib/config": [
+        "libs/errors/config/src",
+        "libs/config/src"
+      ],
+      "@lib/config/*": [
+        "libs/errors/config/src/*",
+        "libs/config/src/*"
+      ],
+      "@lib/errors": [
+        "libs/errors/src"
+      ],
+      "@lib/errors/*": [
+        "libs/errors/src/*"
+      ],
+      "@lib/middleware": [
+        "libs/middleware/src"
+      ],
+      "@lib/middleware/*": [
+        "libs/middleware/src/*"
+      ],
+      "lib/guards": [
+        "libs/guards/src"
+      ],
+      "lib/guards/*": [
+        "libs/guards/src/*"
+      ]
+    }
   }
 }
