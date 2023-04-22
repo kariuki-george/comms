@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { TypedConfigModule, fileLoader } from 'nest-typed-config';
+import { TypedConfigModule, fileLoader, selectConfig } from 'nest-typed-config';
 import config from './config';
 
 @Module({
@@ -12,3 +12,11 @@ import config from './config';
   ],
 })
 export class ConfigModule {}
+
+export const outsideNestIOCConfig = selectConfig(
+  TypedConfigModule.forRoot({
+    schema: config,
+    load: fileLoader(),
+  }),
+  config,
+);

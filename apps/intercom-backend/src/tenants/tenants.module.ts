@@ -11,5 +11,6 @@ import { TenantsRepo } from './tenants.repo';
   imports: [
     MongooseModule.forFeature([{ name: Tenant.name, schema: TenantSchema }]),
   ],
+  exports:[]
 })
 export class TenantsModule {}

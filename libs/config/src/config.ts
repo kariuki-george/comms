@@ -7,4 +7,10 @@ export default class Config {
   @IsInt()
   @IsPositive()
   INTERCOM_PORT: number;
+  @IsNumber()
+  @IsInt()
+  @IsPositive()
+  NOTIFICATIONS_PORT: number;
+  @IsString()
+  KAFKA_URI: string;
 }

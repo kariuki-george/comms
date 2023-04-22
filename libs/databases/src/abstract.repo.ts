@@ -6,6 +6,8 @@ import {
   UpdateQuery,
   SaveOptions,
   Connection,
+  ClientSession,
+  ProjectionFields,
 } from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
 
@@ -30,12 +32,17 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     ).toJSON() as unknown as TDocument;
   }
 
-  async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
-    const document = await this.model.findOne(filterQuery, {}, { lean: true });
+  async findOne(
+    filterQuery: FilterQuery<TDocument>,
+    projection?: ProjectionFields<TDocument>,
+  ): Promise<TDocument> {
+    const document = await this.model.findOne(filterQuery, projection, {
+      lean: true,
+    });
 
     if (!document) {
       this.logger.warn('Document not found with filterQuery', filterQuery);
-      throw new NotFoundException('Document not found.');
+      return null;
     }
 
     return document;
@@ -44,10 +51,12 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   async findOneAndUpdate(
     filterQuery: FilterQuery<TDocument>,
     update: UpdateQuery<TDocument>,
+    projection?: ProjectionFields<TDocument>,
   ) {
     const document = await this.model.findOneAndUpdate(filterQuery, update, {
       lean: true,
       new: true,
+      projection,
     });
 
     if (!document) {
@@ -61,19 +70,24 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   async upsert(
     filterQuery: FilterQuery<TDocument>,
     document: Partial<TDocument>,
+    projection?: ProjectionFields<TDocument>,
   ) {
     return this.model.findOneAndUpdate(filterQuery, document, {
       lean: true,
       upsert: true,
       new: true,
+      projection,
     });
   }
 
-  async find(filterQuery: FilterQuery<TDocument>) {
-    return this.model.find(filterQuery, {}, { lean: true });
+  async find(
+    filterQuery: FilterQuery<TDocument>,
+    projection?: ProjectionFields<TDocument>,
+  ) {
+    return this.model.find(filterQuery, {}, { lean: true, projection });
   }
 
-  async startTransaction() {
+  async startTransaction(): Promise<ClientSession> {
     const session = await this.connection.startSession();
     session.startTransaction();
     return session;

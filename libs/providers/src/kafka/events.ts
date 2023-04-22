@@ -1,0 +1,3 @@
+// TENANTS
+export const TENANTS_CREATE = 'TENANTS.CREATE';
+export const AUTH_MAGIC_LINK = 'AUTH.MAGIC_LINK';
