@@ -55,6 +55,12 @@
       ],
       "lib/guards/*": [
         "libs/guards/src/*"
+      ],
+      "lib/shared": [
+        "libs/shared/src"
+      ],
+      "lib/shared/*": [
+        "libs/shared/src/*"
       ]
     }
   }

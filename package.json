@@ -1,10 +1,10 @@
 {
   "name": "intercom-backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Intercom like chatbot clone for learning purposes",
+  "author": "Kariuki George",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
@@ -22,14 +22,19 @@
   "dependencies": {
     "@nestjs/common": "^9.4.0",
     "@nestjs/core": "^9.4.0",
+    "@nestjs/mongoose": "^9.2.2",
     "@nestjs/platform-express": "^9.4.0",
+    "@nestjs/swagger": "^6.3.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "mongoose": "^7.0.4",
+    "nest-typed-config": "^2.5.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.4.1",
     "@nestjs/schematics": "^9.1.0",
-    "@nestjs/testing": "^9.4.0",
     "@types/express": "^4.17.17",
     "@types/jest": "29.2.4",
     "@types/node": "18.11.18",
@@ -75,7 +80,8 @@
       "^@lib/config(|/.*)$": "<rootDir>/libs/config/src/$1",
       "^@lib/errors(|/.*)$": "<rootDir>/libs/errors/src/$1",
       "^@lib/middleware(|/.*)$": "<rootDir>/libs/middleware/src/$1",
-      "^lib/guards(|/.*)$": "<rootDir>/libs/guards/src/$1"
+      "^lib/guards(|/.*)$": "<rootDir>/libs/guards/src/$1",
+      "^lib/shared(|/.*)$": "<rootDir>/libs/shared/src/$1"
     }
   }
 }
