@@ -1,4 +1,10 @@
-import { IsInt, IsNumber, IsPositive, IsString } from 'class-validator';
+import {
+  IsInt,
+  IsNumber,
+  IsPositive,
+  IsString,
+  IsStrongPassword,
+} from 'class-validator';
 
 export default class Config {
   @IsString()
@@ -13,4 +19,7 @@ export default class Config {
   NOTIFICATIONS_PORT: number;
   @IsString()
   KAFKA_URI: string;
+  @IsString()
+  @IsStrongPassword({ minLength: 20 })
+  JWT_SECRET: string;
 }

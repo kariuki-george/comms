@@ -2,7 +2,7 @@ import { AbstractDocument } from '@lib/databases/abstract.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Schema({ versionKey: false })
+@Schema({ versionKey: false, timestamps: true })
 export class Tenant extends AbstractDocument {
   @Prop({ unique: true })
   @ApiProperty()
@@ -10,21 +10,23 @@ export class Tenant extends AbstractDocument {
   @Prop()
   @ApiProperty()
   name: string;
-  @Prop({ select: false })
-  @ApiProperty()
+  @Prop()
+  @ApiProperty({ isArray: true })
   roles?: string[];
-  @Prop({ select: false })
+
+  @ApiProperty()
+  @Prop()
+  createdAt?: Date;
+  @ApiProperty()
+  @Prop()
+  updatedAt?: Date;
+  @ApiProperty()
+  @Prop()
+  lastSignIn?: Date;
+  @Prop()
   refreshToken?: string;
-
-  @Prop({ select: false })
-  ipAddresses?: string[];
-  @Prop({ select: false })
-  tenantConfirmAccountToken?: string;
-  @Prop({ select: false })
-  loginToken?: string;
-
-  @Prop({ default: false, select: false })
-  emailVerified?: boolean;
+  @Prop()
+  password?: string;
 }
 
 export const TenantSchema = SchemaFactory.createForClass(Tenant);

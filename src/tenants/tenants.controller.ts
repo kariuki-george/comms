@@ -3,12 +3,9 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
-  ApiNotFoundResponse,
-  ApiOkResponse,
-  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { ConfirmTenantDto, CreateTenantDto } from './dtos/index.dtos';
+import { CreateTenantDto } from './dtos/index.dtos';
 import { TenantsService } from './tenants.service';
 import { Tenant } from './models/tenant.model';
 import { USER_ALREADY_EXISTS } from '@lib/errors';
@@ -32,32 +29,17 @@ export class TenantsController {
     return this.tenantsService.createTenant(createTenantInput);
   }
 
-  @Post('/confirm-email')
-  @ApiOkResponse({
-    description: "Tenant's email successfully confirmed",
-  })
-  @ApiBadRequestResponse({
-    description: 'Email or Token is invalid',
-  })
-  @ApiNotFoundResponse({
-    description: 'Provided email not found',
-  })
-  confirmTenant(@Body() confirmTenant: ConfirmTenantDto): Promise<Tenant> {
-    return this.tenantsService.confirmTenant(confirmTenant);
-  }
-
-  @Post('/login-link')
-  @ApiOkResponse({
-    description: 'Magic link sent to email',
-  })
-  @ApiNotFoundResponse({
-    description: 'Provided email not found',
-  })
-  @ApiOperation({
-    description:
-      'This operation requests a magic link with a token for tenant login',
-  })
-  tenantLogin(@Body() email: string): Promise<boolean> {
-    return this.tenantsService.tenantLogin(email);
-  }
+  // @Post('/confirm-email')
+  // @ApiOkResponse({
+  //   description: "Tenant's email successfully confirmed",
+  // })
+  // @ApiBadRequestResponse({
+  //   description: 'Email or Token is invalid',
+  // })
+  // @ApiNotFoundResponse({
+  //   description: 'Provided email not found',
+  // })
+  // confirmTenant(@Body() confirmTenant: ConfirmTenantDto): Promise<Tenant> {
+  //   return this.tenantsService.confirmTenant(confirmTenant);
+  // }
 }

@@ -7,9 +7,10 @@ import { ConfigModule } from '@lib/config';
 import { DatabaseModule } from '@lib/databases';
 import { KafkaModule } from '@lib/providers/kafka/kafka.module';
 import { AuthModule } from './auth/auth.module';
-import { OrganizationsModule } from './organizations/organizations.module';
 import { ChatroomsModule } from './chatrooms/chatrooms.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { RolesModule } from './roles/roles.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -19,9 +20,10 @@ import { NotificationsModule } from './notifications/notifications.module';
     DatabaseModule,
     KafkaModule,
     AuthModule,
-    OrganizationsModule,
     ChatroomsModule,
     NotificationsModule,
+    RolesModule,
+    CacheModule.register({isGlobal:true}),
   ],
   controllers: [AppController],
   providers: [AppService],
