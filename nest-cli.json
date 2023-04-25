@@ -1,49 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/intercom-backend/src",
+  "sourceRoot": "src",
   "compilerOptions": {
-    "deleteOutDir": true,
-    "webpack": true,
-    "tsConfigPath": "apps/intercom-backend/tsconfig.app.json"
+    "webpack": true
   },
-  "monorepo": true,
-  "root": "apps/intercom-backend",
+  "root": "src",
   "projects": {
     "intercom-backend": {
       "type": "application",
-      "root": "apps/intercom-backend",
+      "root": ".",
       "entryFile": "main",
-      "sourceRoot": "apps/intercom-backend/src",
+      "sourceRoot": "./src",
       "compilerOptions": {
-        "tsConfigPath": "apps/intercom-backend/tsconfig.app.json"
-      }
-    },
-    "chats-service": {
-      "type": "application",
-      "root": "apps/chats-service",
-      "entryFile": "main",
-      "sourceRoot": "apps/chats-service/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/chats-service/tsconfig.app.json"
-      }
-    },
-    "analytics": {
-      "type": "application",
-      "root": "apps/analytics",
-      "entryFile": "main",
-      "sourceRoot": "apps/analytics/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/analytics/tsconfig.app.json"
-      }
-    },
-    "notifications": {
-      "type": "application",
-      "root": "apps/notifications",
-      "entryFile": "main",
-      "sourceRoot": "apps/notifications/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/notifications/tsconfig.app.json"
+        "tsConfigPath": "./tsconfig.app.json"
       }
     },
     "databases": {

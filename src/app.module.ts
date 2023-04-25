@@ -8,6 +8,8 @@ import { DatabaseModule } from '@lib/databases';
 import { KafkaModule } from '@lib/providers/kafka/kafka.module';
 import { AuthModule } from './auth/auth.module';
 import { OrganizationsModule } from './organizations/organizations.module';
+import { ChatroomsModule } from './chatrooms/chatrooms.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { OrganizationsModule } from './organizations/organizations.module';
     KafkaModule,
     AuthModule,
     OrganizationsModule,
+    ChatroomsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
