@@ -11,6 +11,7 @@ import { ChatroomsModule } from './chatrooms/chatrooms.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { RolesModule } from './roles/roles.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { CacheModule } from '@nestjs/cache-manager';
     ChatroomsModule,
     NotificationsModule,
     RolesModule,
-    CacheModule.register({isGlobal:true}),
+    CacheModule.register({ isGlobal: true }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

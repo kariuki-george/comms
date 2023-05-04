@@ -1,69 +1,108 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { LoginDto } from './dtos/index.dtos';
-import { TenantsService } from 'src/tenants/tenants.service';
-import { Tenant } from 'src/tenants/models/tenant.model';
-import argon from 'argon2';
-import crypto from 'node:crypto';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
-import jwt from 'jsonwebtoken';
+import * as argon from 'argon2';
+import { v4 as uuidv4 } from 'uuid';
+import * as jwt from 'jsonwebtoken';
 import Config from '@lib/config/config';
+import { User } from 'src/users/entities/user.entity';
+import { PrismaService } from '@lib/databases/prisma.service';
 
 interface LoginRes {
-  tenant: Tenant;
+  user: User;
   authToken: string;
   refreshToken: string;
 }
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly tenantsService: TenantsService,
-
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly prismaService: PrismaService,
     private readonly configService: Config,
   ) {}
   async login(input: LoginDto): Promise<LoginRes> {
-    let tenant = await this.tenantsService.findOne({ email: input.email });
+    const user = await this.prismaService.user.findUnique({
+      where: { email: input.email },
+    });
+    if (!user) {
+      throw new NotFoundException('User with the provided email not found');
+    }
     // Check password
-    const isValid = argon.verify(tenant.password, input.password);
+    const isValid = argon.verify(user.password, input.password);
     if (!isValid) {
       throw new BadRequestException('Wrong email or password');
     }
+    const { authToken, newRefreshToken, cleaneduser } =
+      await this.createAndSaveNewTokens(user.id);
+
+    return { user: cleaneduser, authToken, refreshToken: newRefreshToken };
+  }
+
+  private async createAndSaveNewTokens(userId: number) {
     // Validate user
     // Create auth token and refreshToken
     // Might check performance implications
     // https://github.com/ai/nanoid
-    let authToken = crypto.randomBytes(16).toString('hex');
-    let newRefreshToken = crypto.randomBytes(16).toString('hex');
+    // Create new tokens
 
+    let authToken = uuidv4();
+    let newRefreshToken = uuidv4();
     // Save refreshToken and update user signing time
-    tenant = await this.tenantsService.updateOne(tenant._id.toString(), {
-      lastSignIn: new Date(),
-      refreshToken: newRefreshToken,
+    const user = await this.prismaService.user.update({
+      where: { id: userId },
+      data: {
+        refreshToken: newRefreshToken,
+      },
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, refreshToken, ...cleanedTenant } = tenant;
-
-    // cache the token in session
-
-    await this.cacheManager.set(authToken, cleanedTenant);
+    const { password, refreshToken, ...cleaneduser } = user;
 
     // Encode them using jwt to prevent spamming
     // Check on jwt options
-    authToken = jwt.sign(authToken, this.configService.JWT_SECRET);
-    newRefreshToken = jwt.sign(newRefreshToken, this.configService.JWT_SECRET);
-
-    return { tenant: cleanedTenant, authToken, refreshToken };
+    authToken = jwt.sign(
+      JSON.stringify({ authToken, user: cleaneduser }),
+      this.configService.JWT_SECRET,
+    );
+    newRefreshToken = jwt.sign(
+      JSON.stringify({ refreshToken: newRefreshToken, user: cleaneduser }),
+      this.configService.JWT_SECRET,
+    );
+    return { authToken, newRefreshToken, cleaneduser };
   }
 
-  refreshToken(refreshTokenJwt: string) {
+  async refreshToken(refreshTokenJwt: string) {
     // Decode the jwt
-    // const refreshToken = jwt.verify(
-    //   refreshTokenJwt,
-    //   this.configService.JWT_SECRET,
-    // );
+    let data: { user: User; refreshToken: string };
+    try {
+      const decodedRefreshToken = jwt.verify(
+        refreshTokenJwt,
+        this.configService.JWT_SECRET,
+      );
+
+      data = JSON.parse(decodedRefreshToken as string);
+    } catch (error) {
+      throw new BadRequestException('RefreshToken not valid');
+    }
+
     // Get user
-    console.log(refreshTokenJwt);
+    const user = await this.prismaService.user.findUnique({
+      where: { id: data.user.id },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Invalid refreshToken');
+    }
+
+    if (user.refreshToken != data.refreshToken) {
+      throw new BadRequestException('Expired refreshToken');
+    }
+
+    const { authToken, newRefreshToken, cleaneduser } =
+      await this.createAndSaveNewTokens(user.id);
+
+    return { user: cleaneduser, authToken, refreshToken: newRefreshToken };
   }
 }

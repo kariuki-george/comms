@@ -1,7 +1,9 @@
 import Config from '@lib/config/config';
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PrismaService } from './prisma.service';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -11,5 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       inject: [Config],
     }),
   ],
+  providers: [PrismaService],
+  exports: [PrismaService],
 })
 export class DatabaseModule {}

@@ -10,7 +10,7 @@ import { USER_ALREADY_EXISTS } from '@lib/errors';
 import { Tenant } from './models/tenant.model';
 import { EventsService } from '@lib/providers/kafka/events.service';
 import { TENANTS_CREATE } from '@lib/providers/kafka/events';
-import argon from 'argon2';
+import * as argon from 'argon2';
 import { RolesService } from 'src/roles/roles.service';
 
 // NOTE: HANDLE SENSITIVE FIELDS WITH CARE
@@ -97,11 +97,16 @@ export class TenantsService {
     return true;
   }
 
-  async findOne({ email, _id }: Partial<Tenant>) {
+  findOne({ email, _id }: Partial<Tenant>) {
     if (!email && !_id) {
       throw new BadRequestException('Query user by email or id');
     }
-    return this.tenantsRepo.findOne({ $or: [{ email }, , { _id }] });
+    if (email) {
+      return this.tenantsRepo.findOne({ email });
+    }
+    return this.tenantsRepo.findOne({
+      _id,
+    });
   }
 
   async updateOne(id: string, update: Partial<Tenant>): Promise<Tenant> {

@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+
+}
+
+enum Sender {
+  user
+  agent
+}
+
+
+model User {
+  createdAt     DateTime?       @default(now())
+  updatedAt     DateTime?        @default(now())
+  id            Int             @id @default(autoincrement())
+  name          String?
+  email         String @unique    
+  refreshToken  String?
+  password      String?
+  agents  Agent[]
+  tenants Tenant[]
+}
+
+model Tenant {
+  createdAt     DateTime?        @default(now())
+  updatedAt     DateTime?        @default(now())
+  id            Int             @id @default(autoincrement())
+  org     Org  @relation(fields: [orgId], references: [id])
+  orgId Int
+
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+
+
+  @@unique([id, orgId])
+}
+
+model Agent {
+  createdAt    DateTime?       @default(now())
+  updatedAt    DateTime?       @default(now())
+  id           Int            @id @default(autoincrement())
+  roles Int[]
+  org     Org  @relation(fields: [orgId], references: [id])
+  orgId Int
+
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+
+
+  @@unique([id, orgId])
+}
+
+
+
+
+model Role {
+  id            Int             @id @default(autoincrement())
+  name          String?
+
+  org     Org  @relation(fields: [orgId], references: [id])
+  orgId Int
+
+
+
+  @@unique([id, orgId])
+}
+
+model Org {
+  createdAt DateTime?  @default(now())
+  updatedAt DateTime?  @default(now())
+  id        Int       @id @default(autoincrement())
+  tenants   Tenant[]  
+  agents    Agent   []
+  chatbot   Chatbot  []
+  roles     Role[]
+}
+
+
+model Chatbot {
+  createdAt        DateTime?  @default(now())
+  updatedAt        DateTime?  @default(now())
+  id               Int       @id @default(autoincrement())
+  name             String?
+  apikey           String?
+  chatroomIdleTime String?
+  chatroom         Chatroom  @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  org     Org  @relation(fields: [orgId], references: [id])
+  orgId Int
+
+  @@unique([id, orgId])
+}
+
+model Chatroom {
+  id               Int       @id @default(autoincrement())
+  chatroomIdleTime String?
+  chatbotId        Int?
+  userEmail        String?
+  userName         String?
+  agentId          String?
+  createdAt        DateTime?  @default(now())
+  agentJoinedAt    DateTime?  @default(now())
+  updatedAt        DateTime?  @default(now())
+  orgId            Int?
+  chatbot          Chatbot?
+  message          message[]
+}
+
+model message {
+  sender   Sender?
+  sentAt   DateTime?  @default(now())
+  readAt   DateTime?  @default(now())
+  message  String?
+  id       Int       @id @default(autoincrement())
+  chatroom     Chatroom  @relation(fields: [chatroomId], references: [id])
+  chatroomId Int
+}
+
+
+
+
+

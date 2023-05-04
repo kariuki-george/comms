@@ -3,13 +3,15 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { outsideNestIOCConfig } from '@lib/config';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = outsideNestIOCConfig;
 
-  app.useGlobalPipes(new ValidationPipe({}));
+  app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }));
   app.setGlobalPrefix('/intercom');
+  app.use(cookieParser());
 
   const config = new DocumentBuilder()
     .setTitle('Intercom Clone')
