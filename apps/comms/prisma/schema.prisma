@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Chatbot {
+  createdAt        DateTime?  @default(now())
+  updatedAt        DateTime?  @default(now())
+  id               Int        @id @default(autoincrement())
+  name             String?
+  apikey           String?
+  chatroomIdleTime String?
+  orgId            Int
+  Org              Org        @relation(fields: [orgId], references: [id])
+  Chatroom         Chatroom[]
+}
+
+model Chatroom {
+  id               Int       @id @default(autoincrement())
+  chatroomIdleTime String?
+  chatbotId        Int
+  userEmail        String?
+  userName         String?
+  agentId          String?
+  createdAt        DateTime? @default(now())
+  agentJoinedAt    DateTime? @default(now())
+  updatedAt        DateTime? @default(now())
+  orgId            Int?
+  Chatbot          Chatbot   @relation(fields: [chatbotId], references: [id])
+  message          message[]
+}
+
+model Org {
+  name      String
+  createdAt DateTime?  @default(now())
+  updatedAt DateTime?  @default(now())
+  id        Int        @id @default(autoincrement())
+  Chatbot   Chatbot[]
+  Role      Role[]
+  UserRole  UserRole[]
+}
+
+model Role {
+  id    Int     @id @default(autoincrement())
+  name  String?
+  orgId Int
+  Org   Org     @relation(fields: [orgId], references: [id])
+
+  @@unique([id, orgId])
+}
+
+model User {
+  createdAt    DateTime?  @default(now())
+  updatedAt    DateTime?  @default(now())
+  id           Int        @id @default(autoincrement())
+  name         String?
+  email        String     @unique
+  refreshToken String?
+  password     String?
+  UserRole     UserRole[]
+}
+
+model UserRole {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  roles  Json
+  orgId  Int
+  Org    Org  @relation(fields: [orgId], references: [id])
+  User   User @relation(fields: [userId], references: [id])
+}
+
+model message {
+  sender     Sender?
+  sentAt     DateTime? @default(now())
+  readAt     DateTime? @default(now())
+  message    String?
+  id         Int       @id @default(autoincrement())
+  chatroomId Int
+  Chatroom   Chatroom  @relation(fields: [chatroomId], references: [id])
+}
+
+enum Sender {
+  user
+  agent
+}
