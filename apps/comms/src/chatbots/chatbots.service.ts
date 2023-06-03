@@ -3,6 +3,7 @@ import { CreateChatbotDto } from './dtos/index.dto';
 import { DBService } from '@db/database';
 import { randomUUID } from 'node:crypto';
 import { CreateChatbotRes } from './res/index.res';
+import { Chatbot } from '@prisma/client';
 
 @Injectable()
 export class ChatbotsService {
@@ -32,5 +33,9 @@ export class ChatbotsService {
         updatedAt: true,
       },
     });
+  }
+
+  findOne(chatbotId: number): Promise<Chatbot> {
+    return this.dbService.chatbot.findUnique({ where: { id: chatbotId } });
   }
 }

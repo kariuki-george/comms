@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -21,8 +21,16 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.3.2",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/mongoose": "^9.2.2",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/platform-socket.io": "^9.4.2",
+    "@nestjs/websockets": "^9.4.2",
+    "axios": "^1.4.0",
+    "cookie-parser": "^1.4.6",
+    "mongoose": "^7.2.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
   },
@@ -55,7 +63,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -63,7 +71,15 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^db/db(|/.*)$": "<rootDir>/libs/db/src/$1",
+      "^redis/redis(|/.*)$": "<rootDir>/libs/redis/src/$1"
+    }
   }
 }

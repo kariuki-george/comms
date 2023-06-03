@@ -16,6 +16,20 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "db/db": [
+        "libs/db/src"
+      ],
+      "db/db/*": [
+        "libs/db/src/*"
+      ],
+      "redis/redis": [
+        "libs/redis/src"
+      ],
+      "redis/redis/*": [
+        "libs/redis/src/*"
+      ]
+    }
   }
 }
