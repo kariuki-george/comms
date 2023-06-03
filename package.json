@@ -1,7 +1,7 @@
 {
-  "name": "comms-backend",
+  "name": "comms",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project is a intercom-like clone for learning purposes",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
