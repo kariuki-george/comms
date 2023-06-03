@@ -13,27 +13,27 @@ model Chatbot {
   updatedAt        DateTime?  @default(now())
   id               Int        @id @default(autoincrement())
   name             String?
-  apikey           String?
+  chatbotKey           String?
   chatroomIdleTime String?
   orgId            Int
   Org              Org        @relation(fields: [orgId], references: [id])
-  Chatroom         Chatroom[]
+ 
 }
 
-model Chatroom {
-  id               Int       @id @default(autoincrement())
-  chatroomIdleTime String?
-  chatbotId        Int
-  userEmail        String?
-  userName         String?
-  agentId          String?
-  createdAt        DateTime? @default(now())
-  agentJoinedAt    DateTime? @default(now())
-  updatedAt        DateTime? @default(now())
-  orgId            Int?
-  Chatbot          Chatbot   @relation(fields: [chatbotId], references: [id])
-  message          message[]
-}
+// model Chatroom {
+//   id               Int       @id @default(autoincrement())
+//   chatroomIdleTime String?
+//   chatbotId        Int
+//   userEmail        String?
+//   userName         String?
+//   agentId          String?
+//   createdAt        DateTime? @default(now())
+//   agentJoinedAt    DateTime? @default(now())
+//   updatedAt        DateTime? @default(now())
+//   orgId            Int?
+//   Chatbot          Chatbot   @relation(fields: [chatbotId], references: [id])
+//   message          message[]
+// }
 
 model Org {
   name      String
@@ -74,17 +74,17 @@ model UserRole {
   User   User @relation(fields: [userId], references: [id])
 }
 
-model message {
-  sender     Sender?
-  sentAt     DateTime? @default(now())
-  readAt     DateTime? @default(now())
-  message    String?
-  id         Int       @id @default(autoincrement())
-  chatroomId Int
-  Chatroom   Chatroom  @relation(fields: [chatroomId], references: [id])
-}
+// model message {
+//   sender     Sender?
+//   sentAt     DateTime? @default(now())
+//   readAt     DateTime? @default(now())
+//   message    String?
+//   id         Int       @id @default(autoincrement())
+//   chatroomId Int
+//   Chatroom   Chatroom  @relation(fields: [chatroomId], references: [id])
+// }
 
-enum Sender {
-  user
-  agent
-}
+// enum Sender {
+//   user
+//   agent
+// }

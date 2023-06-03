@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { RolesModule } from './roles/roles.module';
+import { ChatbotsModule } from './chatbots/chatbots.module';
+import { OrgsModule } from './orgs/orgs.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { RolesModule } from './roles/roles.module';
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
      RolesModule,
+     ChatbotsModule,
+     OrgsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
