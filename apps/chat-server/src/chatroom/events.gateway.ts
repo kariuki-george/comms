@@ -1,13 +1,16 @@
+import { UseInterceptors } from '@nestjs/common';
 import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
+import { RedisPropagatorInterceptor } from 'ws/ws/redis-propagator.interceptor';
 
-@WebSocketGateway(3010, { transports: ['websocket'] })
+@UseInterceptors(RedisPropagatorInterceptor)
+@WebSocketGateway()
 export class EventsGateway {
   @SubscribeMessage('events')
-  handleEvent(@MessageBody() data: string): string {
-    return data;
+  handleEvent(@MessageBody() data: string) {
+    return data + data;
   }
 }

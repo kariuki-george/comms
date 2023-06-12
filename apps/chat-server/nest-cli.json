@@ -16,6 +16,15 @@
         "tsConfigPath": "libs/db/tsconfig.lib.json"
       }
     },
+    "ws": {
+      "type": "library",
+      "root": "libs/ws",
+      "entryFile": "index",
+      "sourceRoot": "libs/ws/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/ws/tsconfig.lib.json"
+      }
+    },
     "redis": {
       "type": "library",
       "root": "libs/redis",

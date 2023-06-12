@@ -8,7 +8,7 @@ import { EventsGateway } from './events.gateway';
 
 @Module({
   controllers: [ChatroomController],
-  providers: [ChatroomService, ChatroomRepo],
+  providers: [ChatroomService, ChatroomRepo, EventsGateway],
   imports: [
     MongooseModule.forFeature([
       { name: Chatroom.name, schema: ChatroomSchema },

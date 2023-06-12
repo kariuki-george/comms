@@ -8,7 +8,7 @@ export interface RedisSubscribeMessage {
 }
 
 @Injectable()
-export class RedisService {
+export class RedisPubSubService {
   public constructor(
     @Inject(REDIS_CONSTANTS.REDIS_SUBSCRIBER_CLIENT)
     private readonly redisSubscriberClient: RedisClient,
@@ -20,7 +20,7 @@ export class RedisService {
   public fromEvent<T>(eventName: string): Observable<T> {
     this.redisSubscriberClient.subscribe(eventName);
 
-    return Observable.create((observer: Observer<RedisSubscribeMessage>) =>
+    return new Observable((observer: Observer<RedisSubscribeMessage>) =>
       this.redisSubscriberClient.on('message', (channel, message) =>
         observer.next({ channel, message }),
       ),

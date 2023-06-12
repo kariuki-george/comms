@@ -1,8 +1,6 @@
-// Read more: https://blog.logrocket.com/scalable-websockets-with-nestjs-and-redis/
-
 import { Redis } from 'ioredis';
 import { Provider } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 export type RedisClient = Redis;
 export enum REDIS_CONSTANTS {
@@ -19,7 +17,7 @@ export const redisProviders: Provider[] = [
       });
     },
 
-    inject: [ConfigModule],
+    inject: [ConfigService],
     provide: REDIS_CONSTANTS.REDIS_PUBLISHER_CLIENT,
   },
   {
@@ -30,7 +28,7 @@ export const redisProviders: Provider[] = [
       });
     },
 
-    inject: [ConfigModule],
+    inject: [ConfigService],
     provide: REDIS_CONSTANTS.REDIS_SUBSCRIBER_CLIENT,
   },
 ];
