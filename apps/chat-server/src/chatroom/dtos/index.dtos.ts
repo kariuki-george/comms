@@ -3,3 +3,8 @@ export class CreateChatroomDto {
   name: string;
   chatbotId: number;
 }
+
+export class MessageDto {
+  sender: 'AGENT' | 'USER';
+  message: string;
+}
