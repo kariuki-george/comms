@@ -1,8 +1,17 @@
 import {
+  AtSign,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  LogIn,
   LucideProps,
   Moon,
+  Plus,
+  Search,
   SunMedium,
   Twitter,
+  User,
   type Icon as LucideIcon,
 } from "lucide-react"
 
@@ -28,4 +37,13 @@ export const Icons = {
       ></path>
     </svg>
   ),
+  downArrow: <ChevronDown />,
+  arrowLeft: <ChevronLeft />,
+  arrowRight: <ChevronRight />,
+  add: <Plus />,
+  join: <LogIn />,
+  search: <Search />,
+  dashboard: <Home />,
+  mentions: <AtSign />,
+  all: <User />,
 }
