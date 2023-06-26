@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateChatbotDto } from './dtos/index.dto';
-import { DBService } from '@db/database';
+import { DBService } from '@db';
 import { randomUUID } from 'node:crypto';
 import { CreateChatbotRes } from './res/index.res';
 import { Chatbot } from '@prisma/client';

@@ -4,7 +4,7 @@ import {
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
-import { RedisPropagatorInterceptor } from 'ws/ws/redis-propagator.interceptor';
+import { RedisPropagatorInterceptor } from '@ws/redis-propagator.interceptor';
 import { MessageDto } from './dtos/index.dtos';
 
 @UseInterceptors(RedisPropagatorInterceptor)

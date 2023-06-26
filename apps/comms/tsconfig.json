@@ -18,8 +18,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@db/database": ["libs/database/src"],
-      "@db/database/*": ["libs/database/src/*"]
+      "@db": ["libs/database/src"],
+      "@db/*": ["libs/database/src/*"],
+       "@redis": ["libs/redis/src"],
+      "@redis/*": ["libs/redis/src/*"], 
+      "@ws": ["libs/ws/src"],
+      "@ws/*": ["libs/ws/src/*"]
     }
   }
 }

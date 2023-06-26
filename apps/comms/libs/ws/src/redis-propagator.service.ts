@@ -3,7 +3,7 @@ import { Server } from 'socket.io';
 import { SocketStateService } from './socket-state.service';
 import { RedisSocketEventSendDto } from './dtos/index.dtos';
 import { tap } from 'rxjs';
-import { RedisPubSubService } from 'redis/redis';
+import { RedisPubSubService } from '@redis';
 
 export const REDIS_SOCKET_EVENT_SEND_NAME = 'REDIS_SOCKET_EVENT_SEND_NAME';
 export const REDIS_SOCKET_EVENT_EMIT_ALL_NAME =

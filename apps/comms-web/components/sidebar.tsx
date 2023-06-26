@@ -21,7 +21,7 @@ const orgList = [{ name: "wow" }, { name: "wow2" }, { name: "wow3" }]
 const Sidebar = () => {
   const [active, setActive] = useState(orgList[0].name)
   return (
-    <div className="w-[250px] py-5 border-r border-gray-300 justify-between flex flex-col">
+    <div className="w-[250px] py-5 border-r border-gray-300 gap-3 flex flex-col">
       {/* Org selector */}
       <section className="p-2 ">
         <DropdownMenu>
@@ -46,7 +46,7 @@ const Sidebar = () => {
 
       <section className="h-full">
         <section className="flex flex-col">
-          <span className="flex">{Icons.search}Search</span>
+          <span className="flex">Search</span>
           <span>Dashboard</span>
           <span>Mentions</span>
           <span>All</span>
@@ -71,7 +71,7 @@ const Sidebar = () => {
               </Link>
             </section>
           </div>
-          <section className="flex flex-col gap-3 mt-20 h-full font-semibold p-2 ">
+          <section className="flex flex-col gap-3 h-full font-semibold p-2 ">
             <div className="flex flex-col gap-2">
               <h2 className="text-lg ">TEAM</h2>
               <section className="flex flex-col pl-3 gap-2 font-normal">
@@ -87,7 +87,7 @@ const Sidebar = () => {
             </div>{" "}
           </section>
 
-          <section className="flex flex-col gap-3 mt-20 h-full font-semibold p-2 ">
+          <section className="flex flex-col gap-3 h-full font-semibold p-2 ">
             <div className="flex flex-col gap-2">
               <h2 className="text-lg ">TEAMMATES</h2>
               <section className="flex flex-col pl-3 gap-2 font-normal">

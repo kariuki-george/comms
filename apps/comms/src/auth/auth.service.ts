@@ -1,4 +1,4 @@
-import { DBService } from '@db/database';
+import { DBService } from '@db';
 import {
   Injectable,
   NotFoundException,

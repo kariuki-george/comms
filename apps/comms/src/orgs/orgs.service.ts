@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateOrgDto } from './dtos/index.dto';
-import { DBService } from '@db/database';
+import { DBService } from '@db';
 import { Org } from '@prisma/client';
 
 @Injectable()
