@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AuthenticatedSocket } from './socker-state.adapter';
+import { AuthenticatedSocket } from './types/index.types';
 
+// Improve the map to be on redis memory instead of node's memory
 @Injectable()
 export class SocketStateService {
   private socketState = new Map<string, AuthenticatedSocket[]>();

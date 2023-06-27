@@ -17,23 +17,11 @@ model Chatbot {
   chatroomIdleTime String?
   orgId            Int
   Org              Org        @relation(fields: [orgId], references: [id])
+  chatrooms Chatroom[]
  
 }
 
-// model Chatroom {
-//   id               Int       @id @default(autoincrement())
-//   chatroomIdleTime String?
-//   chatbotId        Int
-//   userEmail        String?
-//   userName         String?
-//   agentId          String?
-//   createdAt        DateTime? @default(now())
-//   agentJoinedAt    DateTime? @default(now())
-//   updatedAt        DateTime? @default(now())
-//   orgId            Int?
-//   Chatbot          Chatbot   @relation(fields: [chatbotId], references: [id])
-//   message          message[]
-// }
+
 
 model Org {
   name      String
@@ -74,17 +62,32 @@ model UserRole {
   User   User @relation(fields: [userId], references: [id])
 }
 
-// model message {
-//   sender     Sender?
-//   sentAt     DateTime? @default(now())
-//   readAt     DateTime? @default(now())
-//   message    String?
-//   id         Int       @id @default(autoincrement())
-//   chatroomId Int
-//   Chatroom   Chatroom  @relation(fields: [chatroomId], references: [id])
-// }
+model Chatroom {
+  id               Int       @id @default(autoincrement())
+  chatroomIdleTime String?
+  userEmail        String?
+  userName         String?
+  agentId          Int?
+  createdAt        DateTime? @default(now())
+  agentJoinedAt    DateTime? @default(now())
+  updatedAt        DateTime? @default(now())
+  orgId            Int?
+  Chatbot          Chatbot   @relation(fields: [chatbotId], references: [id])
+  chatbotId        Int
+  message          message[]
+}
 
-// enum Sender {
-//   user
-//   agent
-// }
+model message {
+  sender     Sender?
+  sentAt     DateTime? @default(now())
+  readAt     DateTime? @default(now())
+  message    String?
+  id         Int       @id @default(autoincrement())
+  Chatroom   Chatroom  @relation(fields: [chatroomId], references: [id])
+  chatroomId Int
+}
+
+enum Sender {
+  USER
+  AGENT
+}

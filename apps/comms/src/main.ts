@@ -6,7 +6,7 @@ import { initAdapters } from '@ws/adapter.init';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('comms');
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());
   initAdapters(app);

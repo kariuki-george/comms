@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common';
 import { LoginDto } from './dtos/index.dto';
 import { verify } from 'argon2';
-import { sign } from 'jsonwebtoken';
+import { sign, verify as jwtVerify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { UserRes } from 'src/users/res';
 
-interface LoginRes {
+export interface LoginRes {
   user: UserRes;
   authJWT: string;
 }
@@ -22,7 +22,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async login({ email, password }: LoginDto): Promise<Partial<LoginRes>> {
+  async login({ email, password }: LoginDto): Promise<LoginRes> {
     const user = await this.dbService.user.findUnique({ where: { email } });
 
     if (!user)
@@ -54,5 +54,9 @@ export class AuthService {
         name: user.name,
       },
     };
+  }
+
+  verifyWithJwt(token: string) {
+    return jwtVerify(token, this.configService.get<string>('JWTSECRET'));
   }
 }

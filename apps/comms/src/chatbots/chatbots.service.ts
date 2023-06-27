@@ -23,16 +23,23 @@ export class ChatbotsService {
 
     //   Create chatbot key with api
 
-    return this.dbService.chatbot.create({
-      data: { chatbotKey: randomUUID(), name, orgId },
-      select: {
-        id: true,
-        name: true,
-        orgId: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    try {
+      return await this.dbService.chatbot.create({
+        data: { chatbotKey: randomUUID(), name, orgId },
+        select: {
+          id: true,
+          name: true,
+          orgId: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      if (error.code === 'P2003') {
+        throw new BadRequestException('The provided orgId is invalid');
+      }
+      return error;
+    }
   }
 
   findOne(chatbotId: number): Promise<Chatbot> {

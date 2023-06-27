@@ -1,21 +1,21 @@
-import { UseInterceptors } from '@nestjs/common';
 import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
-import { RedisPropagatorInterceptor } from '@ws/redis-propagator.interceptor';
 import { MessageDto } from './dtos/index.dtos';
+import { ChatroomService } from './chatroom.service';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { RedisPropagatorInterceptor } from '@ws';
 
-@UseInterceptors(RedisPropagatorInterceptor)
 @WebSocketGateway()
 export class EventsGateway {
-  @SubscribeMessage('events')
-  handleEvent(@MessageBody() data: string) {
-    return data + data;
-  }
-  @SubscribeMessage('messages')
+  constructor(private readonly chatroomService: ChatroomService) {}
+  @SubscribeMessage('chats')
+  @UseInterceptors(RedisPropagatorInterceptor)
+  @UseGuards(AuthGuard)
   addMessage(@MessageBody() data: MessageDto) {
-    return data;
+    return this.chatroomService.addMessage(data);
   }
 }
