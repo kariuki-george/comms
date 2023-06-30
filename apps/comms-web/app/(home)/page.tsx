@@ -2,14 +2,10 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/button"
-import { SiteHeader } from "@/components/site-header"
 
 export default function IndexPage() {
   return (
-    <div className="w-full min-h-screen   ">
-      {/* Header section */}
-
-      <SiteHeader />
+    <div className="w-full    ">
       {/* Small Hero section */}
 
       <div className="  flex flex-col gap-3 justify-around items-center w-full h-full  ">

@@ -11,7 +11,7 @@ export const siteConfig = {
   ],
   links: {
     twitter: "https://twitter.com/_kariuki_george",
-    github: "https://github.com/kariuki-george",
+    github: "https://github.com/kariuki-george/comms",
   },
   nav: {
     auth: {
@@ -19,10 +19,14 @@ export const siteConfig = {
       register: "/auth/getstarted",
     },
     dashboard: "/dashboard",
-    settings: "/settings",
+    settings: {
+      profile: "/settings/profile",
+      chatbots: "/settings/chatbots",
+      users: "/settings/users",
+    },
     chats: {
-      unassigned: "/chats/unassigned",
-      assigned: "/chats/assigned",
+      new: "/chatrooms/new",
+      chats: "/chatrooms/chats",
     },
   },
 }

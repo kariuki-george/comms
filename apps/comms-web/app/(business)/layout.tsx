@@ -3,7 +3,7 @@
 import "@/styles/globals.css"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import Sidebar from "@/components/sidebar"
+import Header from "@/components/header/header"
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -16,14 +16,12 @@ export default function BusinessLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "bg-background  font-sans   min-h-screen ",
+            "bg-background  font-sans flex flex-col  min-h-screen h-screen ",
             fontSans.variable
           )}
         >
-          <div className=" flex  min-h-screen   ">
-            <Sidebar />
-            {children}
-          </div>
+          <Header />
+          <div className="h-full overflow-hidden"> {children}</div>
         </body>
       </html>
     </>

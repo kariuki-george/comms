@@ -1,7 +1,7 @@
 import React from "react"
 
-import { Icons } from "../icons"
-import { Input } from "../ui/input"
+import { Input } from "@/components/ui/input"
+import { Icons } from "@/components/icons"
 
 const SearchBar = () => {
   return (

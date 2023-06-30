@@ -16,8 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-import { Icons } from "../icons"
+import { Icons } from "@/components/icons"
 
 interface Props<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -98,6 +97,7 @@ const UnassignedTable = <TData, TValue>({
                     return (
                       <TableCell key={cell.id}>
                         {flexRender(
+                          // @ts-ignore
                           cell.column.columnDef?.accessorKey === "join"
                             ? Icons.join
                             : cell.column.columnDef.cell,

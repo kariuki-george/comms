@@ -12,7 +12,7 @@ const Login = () => {
         <h1 className="text-2xl font-bold">Log in to your comms account</h1>
         <LoginForm />
         <span>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href={siteConfig.nav.auth.register}>
             <Button variant={"link"}>Create free Account</Button>
           </Link>
