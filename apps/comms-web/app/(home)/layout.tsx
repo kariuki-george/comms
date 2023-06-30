@@ -31,7 +31,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <div className="flex flex-col">
+    <div className="flex h-full flex-col">
       <Header />
       {children}
     </div>

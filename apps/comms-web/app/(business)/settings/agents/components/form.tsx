@@ -21,9 +21,10 @@ const formSchema = z.object({
   name: z.string().min(3, {
     message: "Chatbot name must be at least 3 characters.",
   }),
+  email: z.string().email(),
 })
 
-const ChatbotForm = () => {
+const AgentForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,7 +52,7 @@ const ChatbotForm = () => {
               <FormControl>
                 <Input placeholder="Name" {...field} />
               </FormControl>
-              <FormDescription>This is your chatbot name.</FormDescription>
+              <FormDescription>This is your agent Email.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -61,4 +62,4 @@ const ChatbotForm = () => {
     </Form>
   )
 }
-export default ChatbotForm
+export default AgentForm

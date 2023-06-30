@@ -17,19 +17,19 @@ const chatbots: IChatbot[] = [
 const ChatbotsPage = () => {
   return (
     <div>
-      <div className="flex items-center flex-col h-full w-full p-10">
-        <h2 className="text-xl font-bold mb-2">Chatbots Page</h2>
+      <div className="flex h-full w-full flex-col items-center p-10">
+        <h2 className="mb-2 text-xl font-bold">Chatbots Page</h2>
         <span>Create, update and delete chatbots</span>
-        <div className="w-1/2   flex flex-col ">
-          <div className="font-semibold text-lg border-b w-full my-4  ">
+        <div className="flex   w-1/2 flex-col ">
+          <div className="my-4 w-full border-b text-lg font-semibold  ">
             Chatbots
           </div>
-          <ul className="flex flex-col gap-3 w-full">
+          <ul className="flex w-full flex-col gap-3">
             {chatbots.map((chatbot) => (
               <Chatbot chatbot={chatbot} key={chatbot.apikey} />
             ))}
           </ul>
-          <div className="font-semibold text-lg border-b w-full mt-10  ">
+          <div className="mt-10 w-full border-b text-lg font-semibold  ">
             New Chatbot
           </div>
           <ChatbotForm />

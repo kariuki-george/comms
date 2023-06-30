@@ -25,7 +25,7 @@ const UnassignedChats = () => {
   ]
 
   return (
-    <div className="h-full w-full p-7 flex flex-col gap-4">
+    <div className="flex h-full w-full flex-col gap-4 p-7">
       {/* Search Func */}
 
       <SearchBar />

@@ -42,7 +42,7 @@ export const LoginForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="gap-3 flex flex-col max-w-[500px] w-full ]"
+        className="] flex w-full max-w-[500px] flex-col gap-3"
       >
         <FormField
           control={form.control}

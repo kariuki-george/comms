@@ -22,7 +22,7 @@ export const siteConfig = {
     settings: {
       profile: "/settings/profile",
       chatbots: "/settings/chatbots",
-      users: "/settings/users",
+      agents: "/settings/agents",
     },
     chats: {
       new: "/chatrooms/new",

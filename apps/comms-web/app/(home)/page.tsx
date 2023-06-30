@@ -8,7 +8,7 @@ export default function IndexPage() {
     <div className="w-full    ">
       {/* Small Hero section */}
 
-      <div className="  flex flex-col gap-3 justify-around items-center w-full h-full  ">
+      <div className="  flex h-full w-full flex-col items-center justify-around gap-3  ">
         <h1 className="text-[50px]">
           Message your customers, <br />
           they&apos;ll love you for it

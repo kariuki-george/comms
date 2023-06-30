@@ -45,9 +45,9 @@ const settingsComponents: NavProps[] = [
     title: "Chatbots",
   },
   {
-    description: "Add, Update and Delete Users",
-    href: siteConfig.nav.settings.users,
-    title: "Users",
+    description: "Add, Update and Delete Agents",
+    href: siteConfig.nav.settings.agents,
+    title: "Agents",
   },
 ]
 

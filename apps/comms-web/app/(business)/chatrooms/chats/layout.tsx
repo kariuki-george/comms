@@ -7,7 +7,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <div className="h-full w-full   flex ">
+    <div className="flex h-full   w-full ">
       {/* All active chats */}
 
       <AllActiveChats />

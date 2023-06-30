@@ -41,16 +41,16 @@ const Chat = ({ chatroomId }: Props) => {
   }, [chats])
 
   return (
-    <div className="w-full flex flex-col justify-between h-full  overflow-hidden relative">
+    <div className="relative flex h-full w-full flex-col  justify-between overflow-hidden">
       {/* Header */}
-      <div className="flex justify-between py-3 px-5 items-center sticky bottom-0 ">
-        <span className="font-semibold text-lg">June Chen{chatroomId}</span>
+      <div className="sticky bottom-0 flex items-center justify-between px-5 py-3 ">
+        <span className="text-lg font-semibold">June Chen{chatroomId}</span>
         <span>
           <Button variant={"outline"}>Close</Button>
         </span>
       </div>
       {/* Chat's space */}
-      <ul className="flex flex-col  gap-2  h-full  overflow-y-auto border-t  border-b p-2  ">
+      <ul className="flex h-full  flex-col  gap-2  overflow-y-auto border-y  p-2">
         {chats.map((val, index) => (
           <li
             className="w-full  p-2  "
@@ -67,7 +67,7 @@ const Chat = ({ chatroomId }: Props) => {
       </ul>
 
       {/* Input bar */}
-      <div className="p-5  pb-10 sticky bottom-0 ">
+      <div className="sticky  bottom-0 p-5 pb-10 ">
         <form className="flex justify-between  gap-2" onSubmit={handleSend}>
           <Input
             placeholder="Enter message"

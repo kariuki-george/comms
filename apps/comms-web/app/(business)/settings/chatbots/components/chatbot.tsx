@@ -18,8 +18,8 @@ const Chatbot = ({ chatbot }: Props) => {
     toast({ description: "Apikey copied to clipboard🙌" })
   }
   return (
-    <li className="flex justify-between  flex-col ">
-      <span className="font-semibold text-lg">{chatbot.name}</span>
+    <li className="flex flex-col  justify-between ">
+      <span className="text-lg font-semibold">{chatbot.name}</span>
       <div className="flex justify-between">
         <code className="text-gray-700">{chatbot.apikey}</code>{" "}
         <span className="flex  gap-2">

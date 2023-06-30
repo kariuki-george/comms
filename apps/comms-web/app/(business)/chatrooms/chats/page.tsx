@@ -2,7 +2,7 @@ import React from "react"
 
 const Chats = () => {
   return (
-    <div className="h-full w-4/5 flex items-center justify-center">
+    <div className="flex h-full w-4/5 items-center justify-center">
       No chat selected
     </div>
   )

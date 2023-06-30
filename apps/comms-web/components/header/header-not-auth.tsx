@@ -8,11 +8,11 @@ import { buttonVariants } from "../ui/button"
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-40 h-30 flex justify-between w-full border-b bg-background py-3 px-10">
+    <header className="h-30 sticky top-0 z-40 flex w-full justify-between border-b bg-background px-10 py-3">
       {/* Organisation */}
       <span>
         <Link href="/">
-          <span className=" font-bold h-full flex items-center text-lg">
+          <span className=" flex h-full items-center text-lg font-bold">
             {siteConfig.name}
           </span>
         </Link>

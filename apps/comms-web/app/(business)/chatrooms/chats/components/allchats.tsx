@@ -10,23 +10,23 @@ import { Button } from "@/components/ui/button"
 
 const ChatItem = () => {
   return (
-    <li className="border-b  flex items-center h-20 justify-around hover:cursor-pointer hover:bg-gray-100">
+    <li className="flex  h-20 items-center justify-around border-b hover:cursor-pointer hover:bg-gray-100">
       <Button
         variant="ghost"
         className="relative h-8 w-8 rounded-full bg-gray-100  "
       >
-        <Avatar className="h-8 w-8  flex items-center">
+        <Avatar className="flex h-8  w-8 items-center">
           <AvatarImage src="/avatars/01.png" alt="@shadcn" />
           <AvatarFallback>SC</AvatarFallback>
         </Avatar>
       </Button>
       <div className="flex flex-col ">
-        <h2 className="font-semibold text-lg">name name</h2>
-        <span className="font-light text-sm">
+        <h2 className="text-lg font-semibold">name name</h2>
+        <span className="text-sm font-light">
           Lorem ipsum, dolor sit amet c...
         </span>
       </div>
-      <Badge className="h-6 w-6 flex items-center  px-2 " variant={"outline"}>
+      <Badge className="flex h-6 w-6 items-center  px-2 " variant={"outline"}>
         <span>9</span>
       </Badge>
     </li>
@@ -35,11 +35,11 @@ const ChatItem = () => {
 
 const AllActiveChats = () => {
   return (
-    <div className="w-1/5  overflow-auto h-full  border-r flex">
-      <ul className="w-full h-full flex flex-col  ">
+    <div className="flex  h-full w-1/5  overflow-auto border-r">
+      <ul className="flex h-full w-full flex-col  ">
         {[1, 2, 3, 4, 5, 6, 7].map((_, index) => (
-          <Link href={siteConfig.nav.chats.chats + "/" + index}>
-            <ChatItem key={index} />
+          <Link key={index} href={siteConfig.nav.chats.chats + "/" + index}>
+            <ChatItem />
           </Link>
         ))}
       </ul>
