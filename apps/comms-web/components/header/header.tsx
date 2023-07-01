@@ -1,6 +1,8 @@
 "use client"
 
 import Link from "next/link"
+import { useOrgState } from "@/state/org.state"
+import useStore from "@/state/useStore"
 
 import { siteConfig } from "@/config/site"
 
@@ -11,11 +13,12 @@ import AuthenticatedRoutes from "./auth-user-routes"
 import { UserNav } from "./user-nav"
 
 const Header = () => {
+  const org = useStore(useOrgState, (state) => state.org)
   return (
     <header className="h-30 sticky top-0 z-40 flex w-full justify-between border-b bg-background px-10 py-3">
       {/* Organisation */}
       <Link href={siteConfig.nav.dashboard}>
-        <span className="text-xl font-semibold">comms</span>
+        <span className="text-xl font-semibold">{org?.name}</span>
       </Link>
       {/* User routes */}
       <span>

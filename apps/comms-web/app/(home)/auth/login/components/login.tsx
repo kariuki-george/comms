@@ -1,10 +1,15 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/state/auth.state"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useMutation } from "react-query"
 import * as z from "zod"
 
-import { Button } from "../ui/button"
+import { siteConfig } from "@/config/site"
+import { login } from "@/lib/fetchers"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -13,30 +18,46 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form"
-import { Input } from "../ui/input"
-
-// Form validation
-const formSchema = z.object({
-  email: z.string().email(),
-
-  password: z.string().min(8),
-})
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { toast } from "@/components/ui/use-toast"
 
 export const LoginForm = () => {
-  // Define form
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-
-      password: "",
+  // Login Functionality
+  const router = useRouter()
+  const { setAuthToken, setUser } = useAuthStore()
+  const { mutate } = useMutation({
+    mutationFn: login,
+    onSuccess: ({ data }) => {
+      setAuthToken(data.authJWT)
+      setUser(data.user)
+      router.replace(siteConfig.nav.orgs)
+      toast({
+        title: "Successfully logged in",
+        description: `Hi ${data.user.name}, welcome back🎉`,
+      })
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    mutate(values)
   }
+
+  // Define form and validation
+
+  const formSchema = z.object({
+    email: z.string().email(),
+
+    password: z.string().min(8),
+  })
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
 
   return (
     <Form {...form}>
@@ -65,7 +86,12 @@ export const LoginForm = () => {
             <FormItem>
               <FormLabel>Your Password</FormLabel>
               <FormControl>
-                <Input className="h-12" placeholder="Password" {...field} />
+                <Input
+                  className="h-12"
+                  placeholder="Password"
+                  {...field}
+                  type="password"
+                />
               </FormControl>
 
               <FormMessage />

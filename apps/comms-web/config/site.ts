@@ -18,6 +18,7 @@ export const siteConfig = {
       login: "/auth/login",
       register: "/auth/getstarted",
     },
+    orgs: "/orgs",
     dashboard: "/dashboard",
     settings: {
       profile: "/settings/profile",

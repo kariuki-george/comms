@@ -16,7 +16,6 @@ const ChatItem = () => {
         className="relative h-8 w-8 rounded-full bg-gray-100  "
       >
         <Avatar className="flex h-8  w-8 items-center">
-          <AvatarImage src="/avatars/01.png" alt="@shadcn" />
           <AvatarFallback>SC</AvatarFallback>
         </Avatar>
       </Button>

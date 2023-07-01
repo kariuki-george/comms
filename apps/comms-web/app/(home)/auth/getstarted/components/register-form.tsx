@@ -1,10 +1,16 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+import { IUser } from "@/state/auth.state"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { AxiosError } from "axios"
 import { useForm } from "react-hook-form"
+import { useMutation } from "react-query"
 import * as z from "zod"
 
-import { Button } from "../ui/button"
+import { siteConfig } from "@/config/site"
+import { errorParser, getStarted } from "@/lib/fetchers"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -13,8 +19,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form"
-import { Input } from "../ui/input"
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { toast } from "@/components/ui/use-toast"
 
 // Form validation
 const formSchema = z.object({
@@ -32,11 +39,30 @@ export const RegisterForm = () => {
       email: "",
       name: "",
       password: "",
+      confirmPassword: "",
     },
   })
 
+  // Submit
+  const router = useRouter()
+  const { mutate, isLoading } = useMutation("getStarted", getStarted, {
+    onSuccess: (data: any) => {
+      toast({
+        title: "Account created successfully!",
+        description: `Welcome ${data?.name ?? "User"}, let's log you in.`,
+      })
+      router.push(siteConfig.nav.auth.login)
+    },
+  })
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    if (values.confirmPassword !== values.password) {
+      return toast({
+        title: "An error occurred",
+        description: "Password and confirmPassword should be the same",
+        variant: "destructive",
+      })
+    }
+    mutate(values)
   }
 
   return (
@@ -82,7 +108,12 @@ export const RegisterForm = () => {
             <FormItem>
               <FormLabel>Your Password</FormLabel>
               <FormControl>
-                <Input className="h-12" placeholder="Password" {...field} />
+                <Input
+                  type="password"
+                  className="h-12"
+                  placeholder="Password"
+                  {...field}
+                />
               </FormControl>
 
               <FormMessage />
@@ -96,14 +127,14 @@ export const RegisterForm = () => {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input placeholder="Password" {...field} />
+                <Input type="password" placeholder="Password" {...field} />
               </FormControl>
 
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
+        <Button className="w-full" type="submit" disabled={isLoading}>
           Submit
         </Button>
       </form>

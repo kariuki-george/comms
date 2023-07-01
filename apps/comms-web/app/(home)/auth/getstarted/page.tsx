@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/button"
-import { RegisterForm } from "@/components/auth/register-form"
+import { RegisterForm } from "@/app/(home)/auth/getstarted/components/register-form"
 
 const GetStarted = () => {
   return (

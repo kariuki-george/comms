@@ -1,6 +1,12 @@
-import { CreditCard, LogOut, PlusCircle, Settings, User } from "lucide-react"
+"use client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Link from "next/link"
+import { useAuthStore } from "@/state/auth.state"
+import useStore from "@/state/useStore"
+import { LogOut, PlusCircle, Settings, User } from "lucide-react"
+
+import { siteConfig } from "@/config/site"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -14,22 +20,28 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function UserNav() {
+  const state = useStore(useAuthStore, (state) => state)
+  const handleLogout = () => {
+    sessionStorage.clear()
+    state?.clear()
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarFallback>{state?.user?.name.slice(0, 3)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">shadcn</p>
+            <p className="text-sm font-medium leading-none">
+              {state?.user?.name}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
-              m@example.com
+              {state?.user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -48,13 +60,13 @@ export function UserNav() {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <PlusCircle className="mr-2 h-4 w-4" />
-            <span>Switch Org</span>
+            <Link href={siteConfig.nav.orgs}>Switch Org</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <button onClick={handleLogout}>Log out</button>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

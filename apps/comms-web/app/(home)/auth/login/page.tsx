@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/button"
-import { LoginForm } from "@/components/auth/login"
+import { LoginForm } from "@/app/(home)/auth/login/components/login"
 
 const Login = () => {
   return (
