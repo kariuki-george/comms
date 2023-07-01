@@ -24,4 +24,17 @@ export class OrgsService {
       data: { name, UserRole: { create: { roles: rolesJSon, userId } } },
     });
   }
+
+  // Might require a better db model
+
+  getByUserId(userId: number) {
+    return this.dbService.userRole.findMany({
+      where: { userId },
+      select: {
+        Org: {
+          select: { name: true, id: true, createdAt: true, updatedAt: true },
+        },
+      },
+    });
+  }
 }

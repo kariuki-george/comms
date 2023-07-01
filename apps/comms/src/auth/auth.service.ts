@@ -35,15 +35,12 @@ export class AuthService {
     }
 
     // Create login tokens
-    const authJWT = sign(
-      {
-        createdAt: user.createdAt,
-        email: user.email,
-        id: user.id,
-        name: user.name,
-      },
-      this.configService.get<string>('JWTSECRET'),
-    );
+    const authJWT = this.createJwt({
+      createdAt: user.createdAt,
+      email: user.email,
+      id: user.id,
+      name: user.name,
+    });
 
     return {
       authJWT,
@@ -58,5 +55,9 @@ export class AuthService {
 
   verifyWithJwt(token: string) {
     return jwtVerify(token, this.configService.get<string>('JWTSECRET'));
+  }
+
+  createJwt(data: string | object | Buffer): string {
+    return sign(data, this.configService.get<string>('JWTSECRET'));
   }
 }

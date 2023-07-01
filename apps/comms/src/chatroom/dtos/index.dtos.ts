@@ -8,14 +8,8 @@ export class CreateChatroomDto {
   @IsInt()
   chatbotId: number;
 }
-enum Sender {
-  AGENT = 'AGENT',
-  USER = 'USER',
-}
 
 export class MessageDto {
-  @IsEnum(Sender)
-  sender: Sender;
   @IsString()
   message: string;
   @IsInt()

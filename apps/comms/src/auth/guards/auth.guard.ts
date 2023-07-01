@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { verify } from 'jsonwebtoken';
 import { WsException } from '@nestjs/websockets';
 import { AuthService } from '../auth.service';
 
@@ -20,8 +19,7 @@ export class AuthGuard implements CanActivate {
       const request = context.switchToHttp().getRequest();
 
       // Validate the request to having a correct jwt
-
-      const aid = request.cookies['aid'];
+      const aid = request.headers.aid;
 
       if (!aid) throw new UnauthorizedException();
 

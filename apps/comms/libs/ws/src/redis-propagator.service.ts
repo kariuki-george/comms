@@ -35,7 +35,6 @@ export class RedisPropagatorService {
 
   private consumeSendEvent = (eventInfo: RedisSocketEventSendDto): void => {
     const { event, socketId, userId, data } = eventInfo;
-    console.log(eventInfo);
     return this.socketStateService
       .get(userId)
       .filter((socket) => socket.id !== socketId)

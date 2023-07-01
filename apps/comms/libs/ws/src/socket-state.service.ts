@@ -6,18 +6,18 @@ import { AuthenticatedSocket } from './types/index.types';
 export class SocketStateService {
   private socketState = new Map<string, AuthenticatedSocket[]>();
 
-  public add(userId: string, socket: AuthenticatedSocket): boolean {
-    const existingSockets = this.socketState.get(userId) || [];
+  public add(wsRoomKey: string, socket: AuthenticatedSocket): boolean {
+    const existingSockets = this.socketState.get(wsRoomKey) || [];
 
     const sockets = [...existingSockets, socket];
 
-    this.socketState.set(userId, sockets);
+    this.socketState.set(wsRoomKey, sockets);
 
     return true;
   }
 
-  public remove(userId: string, socket: AuthenticatedSocket): boolean {
-    const existingSockets = this.socketState.get(userId);
+  public remove(wsRoomKey: string, socket: AuthenticatedSocket): boolean {
+    const existingSockets = this.socketState.get(wsRoomKey);
 
     if (!existingSockets) {
       return true;
@@ -26,16 +26,16 @@ export class SocketStateService {
     const sockets = existingSockets.filter((s) => s.id !== socket.id);
 
     if (!sockets.length) {
-      this.socketState.delete(userId);
+      this.socketState.delete(wsRoomKey);
     } else {
-      this.socketState.set(userId, sockets);
+      this.socketState.set(wsRoomKey, sockets);
     }
 
     return true;
   }
 
-  public get(userId: string): AuthenticatedSocket[] {
-    return this.socketState.get(userId) || [];
+  public get(wsRoomKey: string): AuthenticatedSocket[] {
+    return this.socketState.get(wsRoomKey) || [];
   }
   public getAll(): AuthenticatedSocket[] {
     const all = [];

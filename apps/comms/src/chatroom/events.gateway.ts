@@ -1,4 +1,5 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
@@ -8,6 +9,7 @@ import { ChatroomService } from './chatroom.service';
 import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RedisPropagatorInterceptor } from '@ws';
+import { AuthenticatedSocket } from '@ws/types/index.types';
 
 @WebSocketGateway()
 export class EventsGateway {
@@ -15,7 +17,10 @@ export class EventsGateway {
   @SubscribeMessage('chats')
   @UseInterceptors(RedisPropagatorInterceptor)
   @UseGuards(AuthGuard)
-  addMessage(@MessageBody() data: MessageDto) {
-    return this.chatroomService.addMessage(data);
+  async addMessage(
+    @MessageBody() data: MessageDto,
+    @ConnectedSocket() client: AuthenticatedSocket,
+  ) {
+    return this.chatroomService.addMessage(data, client.auth.sender ?? 'AGENT');
   }
 }
