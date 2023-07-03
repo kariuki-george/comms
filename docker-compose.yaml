@@ -1,0 +1,52 @@
+version: '3'
+
+
+networks:
+  pg-dev:
+    external: true 
+  redis:
+    external: true
+  traefik:
+    external: true
+      
+
+services:
+  comms: 
+    hostname: comms 
+    image: comms
+    restart: unless-stopped
+    networks:
+      - pg-dev
+      - redis
+      - traefik
+    env_file:
+      - apps/comms/docker.env
+    ports:
+      - 4000:4000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.comms-api.rule=Host(`api.comms.p.kariukigeorge.me`)
+      - traefik.http.routers.comms-api.tls=true
+      - traefik.http.routers.comms-api.tls.certresolver=lets-encrypt
+      - traefik.port=4000
+  comms-web: 
+    hostname: comms-web
+    image: comms-web
+    restart: unless-stopped
+    networks:
+      - traefik
+    # env_file:
+    #   - apps/comms/docker.env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.comms.rule=Host(`comms.p.kariukigeorge.me`)
+      - traefik.http.routers.comms.tls=true
+      - traefik.http.routers.comms.tls.certresolver=lets-encrypt
+      - traefik.port=3000
+    ports:
+      - 3000:3000
+    
+    
+    
+        
+    
