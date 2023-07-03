@@ -3,7 +3,11 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios"
 
 import { toast } from "@/components/ui/use-toast"
 
-const API = "http://localhost:4000/api/"
+const API = process.env.NEXT_PUBLIC_API_URL
+
+if (!API) {
+  throw new Error("Api Url is not defined")
+}
 
 const authMutate = (url: string, data: any, config?: AxiosRequestConfig) => {
   return axios
