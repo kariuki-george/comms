@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/state/auth.state"
 import useStore from "@/state/useStore"
 import { LogOut, PlusCircle, Settings, User } from "lucide-react"
@@ -21,9 +22,11 @@ import {
 
 export function UserNav() {
   const state = useStore(useAuthStore, (state) => state)
+  const router = useRouter()
   const handleLogout = () => {
     sessionStorage.clear()
     state?.clear()
+    router.replace(siteConfig.nav.auth.login)
   }
   return (
     <DropdownMenu>
