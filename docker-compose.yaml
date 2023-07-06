@@ -35,8 +35,8 @@ services:
     restart: unless-stopped
     networks:
       - traefik
-    # env_file:
-    #   - apps/comms/docker.env
+    env_file:
+      - apps/comms-web/docker.env
     labels:
       - traefik.enable=true
       - traefik.http.routers.comms.rule=Host(`comms.p.kariukigeorge.me`)
