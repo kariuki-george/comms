@@ -19,8 +19,7 @@ services:
       - pg-dev
       - redis
       - traefik
-    env_file:
-      - apps/comms/docker.env
+    env_file: ./apps/comms/docker.env
     ports:
       - 54000:4000
     labels:
@@ -35,8 +34,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik
-    env_file:
-      - apps/comms-web/docker.env
+    env_file: ./apps/comms-web/.env
     labels:
       - traefik.enable=true
       - traefik.http.routers.comms.rule=Host(`comms.p.kariukigeorge.me`)
@@ -51,8 +49,7 @@ services:
       restart: unless-stopped
       networks:
         - traefik
-      env_file:
-        - apps/comms-test/docker.env
+      env_file: ./apps/comms-test/.env
       labels:
         - traefik.enable=true
         - traefik.http.routers.comms-test.rule=Host(`comms-test.p.kariukigeorge.me`)
