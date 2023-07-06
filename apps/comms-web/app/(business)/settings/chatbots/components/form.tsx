@@ -1,10 +1,13 @@
 "use client"
 
 import Link from "next/link"
+import { useOrgState } from "@/state/org.state"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useMutation } from "react-query"
 import * as z from "zod"
 
+import { createChatbot } from "@/lib/fetchers"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -16,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -24,17 +28,25 @@ const formSchema = z.object({
 })
 
 const ChatbotForm = () => {
+  const { toast } = useToast()
+  const org = useOrgState((state) => state.org)
+  const { mutate, isLoading } = useMutation({
+    mutationFn: createChatbot,
+    onSuccess: () => {
+      toast({ description: "Created chatbot successfully" })
+    },
+  })
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    mutate({ name: values.name, orgId: org?.id })
+  }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
     },
   })
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
-  }
 
   return (
     <Form {...form}>
@@ -56,7 +68,9 @@ const ChatbotForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={isLoading} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   )

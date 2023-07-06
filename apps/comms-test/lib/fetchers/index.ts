@@ -16,8 +16,14 @@ if (!API) {
 // }
 
 // To be updated
-export const getChatbot = (chatbotId: string) => {
-  return axios.post(API)
+export const getChatbot = async (chatbotKey: string) => {
+  try {
+    const res = await axios.get(API + "chatbots/" + chatbotKey)
+
+    return res.data
+  } catch (error: any) {
+    errorParser(error)
+  }
 }
 
 export const errorParser = (error: AxiosError) => {

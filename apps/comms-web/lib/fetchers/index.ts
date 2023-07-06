@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/state/auth.state"
+import { useOrgState } from "@/state/org.state"
 import axios, { AxiosError, AxiosRequestConfig } from "axios"
 
 import { toast } from "@/components/ui/use-toast"
@@ -10,12 +11,10 @@ if (!API) {
 }
 
 const authMutate = (url: string, data: any, config?: AxiosRequestConfig) => {
-  return axios
-    .post(url, data, {
-      ...config,
-      headers: { aid: useAuthStore.getState().authToken },
-    })
-    .then((res) => res.data)
+  return axios.post(url, data, {
+    ...config,
+    headers: { aid: useAuthStore.getState().authToken },
+  })
 }
 
 const query = (url: string, config?: AxiosRequestConfig) => {
@@ -35,6 +34,15 @@ export const login = (data: any) => {
 
 export const getOrgs = () => {
   return query(API + "orgs")
+}
+
+// Chatbots
+export const getChatbots = () => {
+  return query(API + "chatbots/org/" + useOrgState.getState().org?.id)
+}
+
+export const createChatbot = (data: any) => {
+  return authMutate(API + "chatbots", data)
 }
 
 export const errorParser = (error: AxiosError) => {

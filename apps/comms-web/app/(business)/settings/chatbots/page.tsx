@@ -1,18 +1,9 @@
 import React from "react"
 
-import Chatbot from "./components/chatbot"
+import Chatbots from "./components/chatbots"
 import ChatbotForm from "./components/form"
 
-export interface IChatbot {
-  name: string
-  apikey: string
-  id: number
-}
 
-const chatbots: IChatbot[] = [
-  { apikey: "idcnindivehahaif ", id: 1, name: "help" },
-  { apikey: "idcnindiveif ", id: 2, name: "feedback" },
-]
 
 const ChatbotsPage = () => {
   return (
@@ -24,11 +15,9 @@ const ChatbotsPage = () => {
           <div className="my-4 w-full border-b text-lg font-semibold  ">
             Chatbots
           </div>
-          <ul className="flex w-full flex-col gap-3">
-            {chatbots.map((chatbot) => (
-              <Chatbot chatbot={chatbot} key={chatbot.apikey} />
-            ))}
-          </ul>
+
+          <Chatbots />
+
           <div className="mt-10 w-full border-b text-lg font-semibold  ">
             New Chatbot
           </div>

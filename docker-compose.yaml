@@ -22,13 +22,13 @@ services:
     env_file:
       - apps/comms/docker.env
     ports:
-      - 4000:4000
+      - 54000:4000
     labels:
       - traefik.enable=true
       - traefik.http.routers.comms-api.rule=Host(`api.comms.p.kariukigeorge.me`)
       - traefik.http.routers.comms-api.tls=true
       - traefik.http.routers.comms-api.tls.certresolver=lets-encrypt
-      - traefik.port=4000
+      - traefik.port=54000
   comms-web: 
     hostname: comms-web
     image: comms-web
@@ -42,9 +42,25 @@ services:
       - traefik.http.routers.comms.rule=Host(`comms.p.kariukigeorge.me`)
       - traefik.http.routers.comms.tls=true
       - traefik.http.routers.comms.tls.certresolver=lets-encrypt
-      - traefik.port=3000
+      - traefik.port=55300
     ports:
-      - 3000:3000
+      - 55300:3000
+  comms-test: 
+      hostname: comms-test
+      image: comms-test
+      restart: unless-stopped
+      networks:
+        - traefik
+      env_file:
+        - apps/comms-test/docker.env
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.comms-test.rule=Host(`comms-test.p.kariukigeorge.me`)
+        - traefik.http.routers.comms-test.tls=true
+        - traefik.http.routers.comms-test.tls.certresolver=lets-encrypt
+        - traefik.port=53000
+      ports:
+        - 53000:3000
     
     
     

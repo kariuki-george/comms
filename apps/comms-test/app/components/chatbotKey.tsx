@@ -1,10 +1,12 @@
 "use client"
 
 import React from "react"
+import { useChatbotStore } from "@/state/useChatbot"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
+import { IChatbot } from "@/types/chatbot"
 import { errorParser, getChatbot } from "@/lib/fetchers"
 import { Button } from "@/components/ui/button"
 import {
@@ -34,13 +36,12 @@ export const ChatbotKeyForm = () => {
   })
 
   // Submit
+  const { setChatbot } = useChatbotStore((state) => state)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const chatbot = await getChatbot(values.chatbotKey)
-    } catch (error: any) {
-      errorParser(error)
-    }
+    const chatbot: IChatbot = await getChatbot(values.chatbotKey)
+    form.reset()
+    setChatbot(chatbot)
   }
 
   return (

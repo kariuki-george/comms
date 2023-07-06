@@ -56,10 +56,7 @@ export class ChatroomService {
       data: { agentId: agent.id, agentJoinedAt: new Date() },
     });
 
-    return chatroom;]
-
-
-    e
+    return chatroom;
   }
 
   async getNewChatroom(orgId: number) {

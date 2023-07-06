@@ -24,6 +24,7 @@ export class ChatbotsService {
     //   Create chatbot key with api
 
     try {
+      // Perform chatbotKey validation
       return await this.dbService.chatbot.create({
         data: { chatbotKey: randomUUID(), name, orgId },
         select: {
@@ -42,7 +43,11 @@ export class ChatbotsService {
     }
   }
 
-  findOne(chatbotId: number): Promise<Chatbot> {
-    return this.dbService.chatbot.findUnique({ where: { id: chatbotId } });
+  findOne(chatbotKey: string): Promise<Chatbot> {
+    return this.dbService.chatbot.findFirst({ where: { chatbotKey } });
+  }
+
+  findAll(orgId: number): Promise<Chatbot[]> {
+    return this.dbService.chatbot.findMany({ where: { orgId } });
   }
 }
