@@ -7,7 +7,7 @@ import {
 import { WsResponse } from '@nestjs/websockets';
 import { Observable, map, tap } from 'rxjs';
 import { AuthenticatedSocket } from './types/index.types';
-import { RedisPropagatorService } from './redis-propagator.service';
+import { RedisPropagatorService } from './redis-consumer.service';
 
 @Injectable()
 export class RedisPropagatorInterceptor<T>

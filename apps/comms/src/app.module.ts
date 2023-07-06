@@ -14,6 +14,7 @@ import { RedisModule } from '@redis';
 
 @Module({
   imports: [
+    RedisModule,
     DatabaseModule,
     UsersModule,
     AuthModule,
@@ -25,7 +26,6 @@ import { RedisModule } from '@redis';
     ChatroomModule,
     DatabaseModule,
     WsModule,
-    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

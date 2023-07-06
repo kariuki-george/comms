@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { SocketStateService } from './socket-state.service';
 import { SocketStateAdapter } from './socker-state.adapter';
-import { RedisPropagatorService } from './redis-propagator.service';
+import { RedisPropagatorService } from './redis-consumer.service';
 
 export const initAdapters = (app: INestApplication): INestApplication => {
   const socketStateService = app.get(SocketStateService);

@@ -7,6 +7,8 @@ export class CreateChatroomDto {
   name: string;
   @IsInt()
   chatbotId: number;
+  @IsString()
+  country: string;
 }
 
 export class MessageDto {

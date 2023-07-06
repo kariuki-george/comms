@@ -4,18 +4,21 @@ import { SocketStateService } from './socket-state.service';
 import { RedisSocketEventSendDto } from './dtos/index.dtos';
 import { tap } from 'rxjs';
 import { RedisPubSubService } from '@redis';
+import { PubSubChannels } from '@redis/types/index.types';
+import { WSService } from './ws.service';
 
 @Injectable()
 export class RedisPropagatorService {
   private socketServer: Server;
 
   public constructor(
-    private readonly socketStateService: SocketStateService,
+    private readonly wsService: WSService,
     private readonly redisPubSubService: RedisPubSubService,
   ) {
+    // Send message
     this.redisPubSubService
-      .fromEvent(' d')
-      .pipe(tap(this.consumeSendEvent))
+      .fromEvent(PubSubChannels.add_message)
+      .pipe(tap(this.wsService.emitAddMessage))
       .subscribe();
   }
 
@@ -32,12 +35,4 @@ export class RedisPropagatorService {
     this.socketServer = server;
     return this;
   }
-
-  private consumeSendEvent = (eventInfo: RedisSocketEventSendDto): void => {
-    const { event, socketId, userId, data } = eventInfo;
-    return this.socketStateService
-      .get(userId)
-      .filter((socket) => socket.id !== socketId)
-      .forEach((socket) => socket.emit(event, data));
-  };
 }

@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateChatroomDto, MessageDto } from './dtos/index.dtos';
 import { DBService } from '@db';
-import { ResponseAndPublishDto } from '@ws/dtos/index.dtos';
 import { AuthService } from 'src/auth/auth.service';
 import { RedisPubSubService } from '@redis';
 import { PubSubChannels } from '@redis/types/index.types';
+import { User, message } from '@prisma/client';
 
 @Injectable()
 export class ChatroomService {
@@ -30,27 +30,41 @@ export class ChatroomService {
       name,
       chatbotId,
       sender: 'USER',
-    });
-
-    // Add chatroom to an agent queue
-    await this.redisPubSubService.publish(PubSubChannels.create_chatroom, {
-      chatroom: chatroom.id,
-      chatbotId,
+      id: email,
     });
 
     return { chatroom, authToken };
   }
 
-  async addMessage(
-    input: MessageDto,
-    sender: 'USER' | 'AGENT',
-  ): Promise<ResponseAndPublishDto> {
+  async addMessage(input: MessageDto, user: any): Promise<message> {
     // Save the message
     const data = await this.dbService.message.create({
-      data: { ...input, sender },
+      data: { ...input, sender: user.sender ?? 'AGENT' },
+      include: { Chatroom: true },
     });
-    // Broadcast the message
 
-    return { data, channel: PubSubChannels.add_message + input.chatroomId };
+    // Broadcast the message
+    await this.redisPubSubService.publish(PubSubChannels.add_message, data);
+
+    delete data.Chatroom;
+    return data;
+  }
+
+  async joinChatRoom(chatroomId: number, agent: User) {
+    const chatroom = await this.dbService.chatroom.update({
+      where: { id: chatroomId },
+      data: { agentId: agent.id, agentJoinedAt: new Date() },
+    });
+
+    return chatroom;]
+
+
+    e
+  }
+
+  async getNewChatroom(orgId: number) {
+    return this.dbService.chatroom.findMany({
+      where: { Chatbot: { orgId }, agentId: null },
+    });
   }
 }
