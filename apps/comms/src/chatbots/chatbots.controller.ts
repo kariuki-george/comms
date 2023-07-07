@@ -2,9 +2,11 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ChatbotsService } from './chatbots.service';
@@ -38,5 +40,14 @@ export class ChatbotsController {
       throw new BadRequestException('OrgId param is not defined');
     }
     return this.chatbotsService.findAll(Number(orgId));
+  }
+
+  @Delete()
+  @UseGuards(AuthGuard)
+  deleteChatbot(@Query('chatbotId') chatbotId: string) {
+    if (!Number(chatbotId)) {
+      throw new BadRequestException('ChatbotId param is not defined');
+    }
+    return this.chatbotsService.deleteChatbot(Number(chatbotId));
   }
 }

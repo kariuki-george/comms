@@ -10,7 +10,9 @@ if (!API) {
   throw new Error("Api Url is not defined")
 }
 
-const authMutate = (url: string, data: any, config?: AxiosRequestConfig) => {
+// Common
+
+const postMutate = (url: string, data: any, config?: AxiosRequestConfig) => {
   return axios.post(url, data, {
     ...config,
     headers: { aid: useAuthStore.getState().authToken },
@@ -23,6 +25,15 @@ const query = (url: string, config?: AxiosRequestConfig) => {
     headers: { aid: useAuthStore.getState().authToken },
   })
 }
+
+const deleteMutation = (url: string, config?: AxiosRequestConfig) => {
+  return axios.delete(url, {
+    ...config,
+    headers: { aid: useAuthStore.getState().authToken },
+  })
+}
+
+// Auth
 
 export const getStarted = (user: any) => {
   return axios.post(API + "users", user)
@@ -42,7 +53,11 @@ export const getChatbots = () => {
 }
 
 export const createChatbot = (data: any) => {
-  return authMutate(API + "chatbots", data)
+  return postMutate(API + "chatbots", data)
+}
+
+export const deleteChatbot = (chatbotId: number) => {
+  return deleteMutation(API + "chatbots", { params: { chatbotId } })
 }
 
 export const errorParser = (error: AxiosError) => {

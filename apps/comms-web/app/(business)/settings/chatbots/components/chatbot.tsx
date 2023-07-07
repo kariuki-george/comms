@@ -1,9 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { Copy, Trash } from "lucide-react"
+import { useMutation } from "react-query"
 
 import { IChatbot } from "@/types/chatbots"
+import { deleteChatbot } from "@/lib/fetchers"
+import { queryClient } from "@/lib/providers/reactquery.provider"
+import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 
 interface Props {
@@ -16,17 +20,40 @@ const Chatbot = ({ chatbot }: Props) => {
     navigator.clipboard.writeText(chatbotKey)
     toast({ description: "ChatbotKey copied to clipboard🙌" })
   }
+
+  // Handle Delete
+
+  const { mutate, isLoading } = useMutation({
+    mutationKey: "chatbots",
+    mutationFn: deleteChatbot,
+    onSuccess: async () => {
+      toast({ description: "Deleted chatbot successfully" })
+
+      queryClient.invalidateQueries("chatbots")
+    },
+  })
+
+  const handleDelete = () => {
+    mutate(chatbot.id)
+    toast({ description: "Deleting chatbot" })
+  }
+
   return (
     <li className="flex flex-col  justify-between ">
       <span className="text-lg font-semibold">{chatbot.name}</span>
       <div className="flex justify-between">
         <code className="text-gray-700">{chatbot.chatbotKey}</code>{" "}
-        <span className="flex  gap-2">
-          <Copy
+        <span className="flex  ">
+          <Button
             onClick={() => handleCopy(chatbot.chatbotKey)}
-            className="h-5 w-5"
-          />
-          {<Trash className="h-5 w-5" />}
+            variant={"ghost"}
+          >
+            <Copy className="h-5 w-5" />
+          </Button>
+
+          <Button onClick={handleDelete} disabled={isLoading} variant={"ghost"}>
+            <Trash className="h-5 w-5" />
+          </Button>
         </span>
       </div>
     </li>

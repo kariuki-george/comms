@@ -27,13 +27,6 @@ export class ChatbotsService {
       // Perform chatbotKey validation
       return await this.dbService.chatbot.create({
         data: { chatbotKey: randomUUID(), name, orgId },
-        select: {
-          id: true,
-          name: true,
-          orgId: true,
-          createdAt: true,
-          updatedAt: true,
-        },
       });
     } catch (error) {
       if (error.code === 'P2003') {
@@ -49,5 +42,9 @@ export class ChatbotsService {
 
   findAll(orgId: number): Promise<Chatbot[]> {
     return this.dbService.chatbot.findMany({ where: { orgId } });
+  }
+
+  deleteChatbot(chatbotId: number) {
+    return this.dbService.chatbot.delete({ where: { id: chatbotId } });
   }
 }

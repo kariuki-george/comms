@@ -73,12 +73,12 @@ const UnassignedTable = <TData, TValue>({
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
+                    {/* {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        )}
+                        )} */}
                   </TableHead>
                 )
               })}
@@ -96,13 +96,13 @@ const UnassignedTable = <TData, TValue>({
                   {row.getVisibleCells().map((cell) => {
                     return (
                       <TableCell key={cell.id}>
-                        {flexRender(
+                        {/* {flexRender(
                           // @ts-ignore
                           cell.column.columnDef?.accessorKey === "join"
                             ? Icons.join
                             : cell.column.columnDef.cell,
                           cell.getContext()
-                        )}
+                        )} */}
                       </TableCell>
                     )
                   })}

@@ -8,6 +8,7 @@ import { useMutation } from "react-query"
 import * as z from "zod"
 
 import { createChatbot } from "@/lib/fetchers"
+import { queryClient } from "@/lib/providers/reactquery.provider"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -34,6 +35,7 @@ const ChatbotForm = () => {
     mutationFn: createChatbot,
     onSuccess: () => {
       toast({ description: "Created chatbot successfully" })
+      queryClient.invalidateQueries("chatbots")
     },
   })
 
