@@ -1,4 +1,10 @@
-import { IsEmail, IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsObject,
+  IsString,
+} from 'class-validator';
 
 export class CreateChatroomDto {
   @IsEmail()
@@ -7,8 +13,8 @@ export class CreateChatroomDto {
   name: string;
   @IsInt()
   chatbotId: number;
-  @IsString()
-  country: string;
+  @IsObject()
+  country: object;
 }
 
 export class MessageDto {

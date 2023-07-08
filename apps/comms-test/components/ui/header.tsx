@@ -1,14 +1,11 @@
-import React from 'react'
+import React from "react"
 
-
-interface Props{
-    children: React.ReactNode
+interface Props {
+  children: React.ReactNode
 }
 
-const Header = ({children}:Props) => {
-  return (
-    <div>{children}</div>
-  )
+const Header = ({ children }: Props) => {
+  return <div>{children}</div>
 }
 
 export default Header

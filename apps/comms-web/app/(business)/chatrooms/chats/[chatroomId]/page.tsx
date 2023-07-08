@@ -11,7 +11,7 @@ export default function Page({ params }: { params: { chatroomId: string } }) {
       {/* User info  */}
       {/* Chatroom: {params.chatroomId} */}
       <div className="w-1/5">
-        <UserBar />
+        <UserBar chatroomId={params.chatroomId} />
       </div>
     </div>
   )

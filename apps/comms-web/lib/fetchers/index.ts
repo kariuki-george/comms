@@ -60,6 +60,20 @@ export const deleteChatbot = (chatbotId: number) => {
   return deleteMutation(API + "chatbots", { params: { chatbotId } })
 }
 
+// Chatrooms
+
+export const getNewChatrooms = () => {
+  return query(API + "chatrooms/" + useOrgState.getState().org?.id)
+}
+
+export const joinChatroom = (chatroomId: number) => {
+  return postMutate(API + "chatrooms/" + chatroomId, {})
+}
+
+export const getMyChatrooms = async () => {
+  return query(API + "chatrooms")
+}
+
 export const errorParser = (error: AxiosError) => {
   if (error.response) {
     const { data } = error.response as any

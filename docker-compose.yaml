@@ -13,13 +13,13 @@ networks:
 services:
   comms: 
     hostname: comms 
-    image: comms
+    image: comms:latest
     restart: unless-stopped
     networks:
       - pg-dev
       - redis
       - traefik
-    env_file: ./apps/comms/docker.env
+    env_file: ./apps/comms/.env
     ports:
       - 54000:4000
     labels:
@@ -30,7 +30,7 @@ services:
       - traefik.port=54000
   comms-web: 
     hostname: comms-web
-    image: comms-web
+    image: comms-web:latest
     restart: unless-stopped
     networks:
       - traefik
@@ -45,7 +45,7 @@ services:
       - 55300:3000
   comms-test: 
       hostname: comms-test
-      image: comms-test
+      image: comms-test:latest
       restart: unless-stopped
       networks:
         - traefik

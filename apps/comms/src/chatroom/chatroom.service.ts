@@ -14,13 +14,14 @@ export class ChatroomService {
     private readonly redisPubSubService: RedisPubSubService,
   ) {}
 
-  async createChatRoom({ chatbotId, email, name }: CreateChatroomDto) {
+  async createChatRoom({ chatbotId, email, name, country }: CreateChatroomDto) {
     // Create chatroom
     const chatroom = await this.dbService.chatroom.create({
       data: {
         userEmail: email,
         userName: name,
         chatbotId,
+        country,
       },
     });
 
@@ -62,6 +63,15 @@ export class ChatroomService {
   async getNewChatroom(orgId: number) {
     return this.dbService.chatroom.findMany({
       where: { Chatbot: { orgId }, agentId: null },
+    });
+  }
+
+  getMyChatrooms(agentId: number) {
+    return this.dbService.chatroom.findMany({
+      where: {
+        agentId,
+        status: 'OPEN',
+      },
     });
   }
 }

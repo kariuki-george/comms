@@ -1,13 +1,15 @@
 import React from "react"
+import moment from "moment"
 
 import { cn } from "@/lib/utils"
 
 interface Props {
   message: string
   isSender: boolean
+  createdAt: Date
 }
 
-const ChatBubble = ({ message, isSender }: Props) => {
+const ChatBubble = ({ message, isSender, createdAt }: Props) => {
   return (
     <div
       className={cn(
@@ -17,7 +19,7 @@ const ChatBubble = ({ message, isSender }: Props) => {
     >
       <span>{message}</span>
       <span className="mt-1  w-full text-right text-sm text-gray-500">
-        {Date().slice(0, 10)}
+        {moment(createdAt).fromNow()}
       </span>
     </div>
   )

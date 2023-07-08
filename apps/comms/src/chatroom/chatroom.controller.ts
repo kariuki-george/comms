@@ -38,4 +38,10 @@ export class ChatroomController {
     }
     return this.chatroomService.joinChatRoom(Number(chatroomId), req.user);
   }
+
+  @Get()
+  @UseGuards(AuthGuard)
+  getChatrooms(@Req() req) {
+    return this.chatroomService.getMyChatrooms(req.user.id);
+  }
 }

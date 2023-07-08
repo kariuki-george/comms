@@ -10,8 +10,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const configService = app.get<ConfigService>(ConfigService);
   initAdapters(app);
-  app.enableCors({ origin: '*' });
-  await app.listen(configService.getOrThrow<'string'>('PORT'), () => {
+  app.enableCors({ origin: '*', allowedHeaders: ['aid'] });
+  await app.listen(configService.getOrThrow<'number'>('PORT'), () => {
     console.log('Comms server started successfully');
   });
 }

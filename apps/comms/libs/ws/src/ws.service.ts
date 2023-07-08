@@ -8,7 +8,7 @@ export class WSService {
   public constructor(private readonly socketStateService: SocketStateService) {}
 
   public emitAddMessage = (eventInfo: AddMessageEventDto) => {
-    const { Chatroom, message } = eventInfo;
+    const { Chatroom, message, chatroomId, id, sender } = eventInfo;
 
     //   Emit to user and agents
 
@@ -16,7 +16,7 @@ export class WSService {
       ...this.socketStateService.get(Chatroom.agentId.toString()),
       ...this.socketStateService.get(Chatroom.userEmail),
     ].forEach((socket: AuthenticatedSocket) => {
-      socket.emit('chats', message);
+      socket.emit('chats', { message, chatroomId, sender, id });
     });
 
     return;

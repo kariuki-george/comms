@@ -2,28 +2,31 @@
 
 import React from "react"
 import Link from "next/link"
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
+import { useQuery } from "react-query"
 
+import { IChatroom } from "@/types/chatroom"
 import { siteConfig } from "@/config/site"
+import { getMyChatrooms } from "@/lib/fetchers"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
-const ChatItem = () => {
+const ChatItem = ({ chatroom }: { chatroom: IChatroom }) => {
   return (
-    <li className="flex  h-20 items-center justify-around border-b hover:cursor-pointer hover:bg-gray-100">
+    <li className="flex  h-20 items-center justify-around gap-1 border-b p-1 hover:cursor-pointer hover:bg-gray-100">
       <Button
         variant="ghost"
         className="relative h-8 w-8 rounded-full bg-gray-100  "
       >
         <Avatar className="flex h-8  w-8 items-center">
-          <AvatarFallback>SC</AvatarFallback>
+          <AvatarFallback>
+            {chatroom.country?.country.slice(0, 2)}
+          </AvatarFallback>
         </Avatar>
       </Button>
-      <div className="flex flex-col ">
-        <h2 className="text-lg font-semibold">name name</h2>
-        <span className="text-sm font-light">
-          Lorem ipsum, dolor sit amet c...
-        </span>
+      <div className="flex w-full  flex-col items-baseline">
+        <h2 className="text-lg font-semibold">{chatroom.userName}</h2>
+        <span className="text-sm font-light">{chatroom.userEmail}</span>
       </div>
       <Badge className="flex h-6 w-6 items-center  px-2 " variant={"outline"}>
         <span>9</span>
@@ -33,19 +36,29 @@ const ChatItem = () => {
 }
 
 const AllActiveChats = () => {
+  // fetch all chatrooms
+  const { data } = useQuery({
+    queryKey: "myChatrooms",
+    queryFn: getMyChatrooms,
+  })
   return (
-    <div className="flex  h-full w-1/5  overflow-auto border-r">
-      <ul className="flex h-full w-full flex-col  ">
-        {[1, 2, 3, 4, 5, 6, 7].map((_, index) => (
-          <Link key={index} href={siteConfig.nav.chats.chats + "/" + index}>
-            <ChatItem />
-          </Link>
-        ))}
-      </ul>
-
-      {/* <span className="p-2 font-semibold text-lg flex justify-center items-center h-full w-full ">
-        no chats
-      </span> */}
+    <div className="flex  h-full  w-1/5 min-w-[250px]  overflow-auto border-r">
+      {data?.data ? (
+        <ul className="flex h-full w-full flex-col  ">
+          {data.data.map((chatroom: IChatroom) => (
+            <Link
+              key={chatroom.id}
+              href={siteConfig.nav.chats.chats + "/" + chatroom.id}
+            >
+              <ChatItem chatroom={chatroom} />
+            </Link>
+          ))}
+        </ul>
+      ) : (
+        <span className="flex h-full w-full items-center justify-center p-2 text-lg font-semibold ">
+          no chats
+        </span>
+      )}
     </div>
   )
 }

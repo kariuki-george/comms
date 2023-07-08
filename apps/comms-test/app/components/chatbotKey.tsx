@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { useChatbotStore } from "@/state/useChatbot"
+import { useGlobalState } from "@/state/useGlobalState"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -19,7 +19,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
 
 export const ChatbotKeyForm = () => {
   // Define form
@@ -36,7 +35,7 @@ export const ChatbotKeyForm = () => {
   })
 
   // Submit
-  const { setChatbot } = useChatbotStore((state) => state)
+  const { setChatbot } = useGlobalState((state) => state)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const chatbot: IChatbot = await getChatbot(values.chatbotKey)

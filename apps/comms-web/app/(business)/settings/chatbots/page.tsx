@@ -3,8 +3,6 @@ import React from "react"
 import Chatbots from "./components/chatbots"
 import ChatbotForm from "./components/form"
 
-
-
 const ChatbotsPage = () => {
   return (
     <div>

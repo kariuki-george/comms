@@ -1,13 +1,21 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useChatState } from "@/state/chat.state"
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import { useMutation, useQuery } from "react-query"
 
+import { IChatroom } from "@/types/chatroom"
+import { siteConfig } from "@/config/site"
+import { getNewChatrooms, joinChatroom } from "@/lib/fetchers"
+import { queryClient } from "@/lib/providers/reactquery.provider"
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -16,102 +24,65 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Icons } from "@/components/icons"
 
-interface Props<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-}
-
-export interface ChatRoom {
-  country: string // might be the code
-  name: string
-  email: string
-  time: string
-  id: number
-}
-
-export const columns: ColumnDef<ChatRoom>[] = [
-  {
-    accessorKey: "country",
-    header: "Country",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "time",
-    header: "Time",
-  },
-  {
-    header: "Join",
-    accessorKey: "join",
-  },
-]
-
-const UnassignedTable = <TData, TValue>({
-  columns,
-  data,
-}: Props<TData, TValue>) => {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
+const UnassignedTable = () => {
+  // Fetch new chatbots
+  const { data } = useQuery({
+    queryFn: getNewChatrooms,
+    queryKey: "chatrooms",
+    refetchInterval: 1000,
   })
+
+  // Handle join
+  const { addChatroom } = useChatState((state) => state)
+  const router = useRouter()
+  const { mutate, isLoading } = useMutation({
+    mutationFn: joinChatroom,
+    mutationKey: "joinChatroom",
+    onSuccess: (data) => {
+      addChatroom(data.data)
+      router.push(siteConfig.nav.chats.chats + "/" + data.data.id)
+      queryClient.invalidateQueries("chatrooms")
+    },
+  })
+  const handleJoin = (chatroomId: number) => {
+    mutate(chatroomId)
+  }
 
   return (
     <div className="rounded-md border">
       <Table>
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {/* {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )} */}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Country</TableHead>
+            <TableHead className="">Join</TableHead>
+          </TableRow>
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => {
+          {data?.data?.length ? (
+            data?.data.map((chatroom: IChatroom) => {
               return (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <TableCell key={cell.id}>
-                        {/* {flexRender(
-                          // @ts-ignore
-                          cell.column.columnDef?.accessorKey === "join"
-                            ? Icons.join
-                            : cell.column.columnDef.cell,
-                          cell.getContext()
-                        )} */}
-                      </TableCell>
-                    )
-                  })}
+                <TableRow key={chatroom.id}>
+                  <TableHead>{chatroom.userName}</TableHead>
+                  <TableHead>{chatroom.userEmail}</TableHead>
+                  <TableHead>{chatroom.country?.country}</TableHead>
+                  <TableHead className="">
+                    <Button
+                      onClick={() => handleJoin(chatroom.id)}
+                      variant={"ghost"}
+                      disabled={isLoading}
+                    >
+                      Join
+                    </Button>
+                  </TableHead>
                 </TableRow>
               )
             })
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={4} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>

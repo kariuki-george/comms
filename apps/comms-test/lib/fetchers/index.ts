@@ -26,6 +26,24 @@ export const getChatbot = async (chatbotKey: string) => {
   }
 }
 
+export const createChatbot = async (data: any) => {
+  try {
+    const res = await axios.post(API + "chatrooms", data)
+    return res.data
+  } catch (error: any) {
+    errorParser(error)
+  }
+}
+
+export const getCountry = async () => {
+  try {
+    const res = await axios.get("http://ip-api.com/json")
+    return res.data
+  } catch (error: any) {
+    errorParser(error)
+  }
+}
+
 export const errorParser = (error: AxiosError) => {
   if (error.response) {
     const { data } = error.response as any

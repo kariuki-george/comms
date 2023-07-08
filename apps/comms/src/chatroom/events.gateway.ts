@@ -11,7 +11,10 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { AuthenticatedSocket } from '@ws/types/index.types';
 
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: { origin: '*', allowedHeaders: ['aid'] },
+  allowUpgrades: true,
+})
 export class EventsGateway {
   constructor(private readonly chatroomService: ChatroomService) {}
   @SubscribeMessage('chats')

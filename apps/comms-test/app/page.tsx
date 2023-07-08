@@ -1,5 +1,6 @@
 import Header from "@/components/header/header"
 
+import ChatbotLayout from "./components/chatbot.layout"
 import ChatbotKey from "./components/chatbotKey"
 
 export default function IndexPage() {
@@ -12,8 +13,9 @@ export default function IndexPage() {
           Message your customers, <br />
           they&apos;ll love you for it
         </h1>
-
         <ChatbotKey />
+
+        <ChatbotLayout />
       </div>
     </div>
   )
