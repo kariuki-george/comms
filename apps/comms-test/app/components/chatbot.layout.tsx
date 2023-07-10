@@ -15,7 +15,7 @@ const ChatbotLayout = () => {
     <div className="h-full w-full ">
       {state?.chatbot &&
         createPortal(
-          <div className="absolute bottom-10 right-10 flex h-1/2 w-full max-w-[400px] flex-col overflow-hidden rounded-sm border ">
+          <div className="absolute bg-background bottom-10 right-10 flex h-1/2 w-full max-w-[400px] flex-col overflow-hidden rounded-sm border ">
             {/* Header */}
             <header className="flex justify-between border-b p-3 text-lg font-semibold">
               <span> {state?.chatbot.name}</span>
