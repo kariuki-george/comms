@@ -11,14 +11,43 @@ import {
 import { ChatroomService } from './chatroom.service';
 import { CreateChatroomDto } from './dtos/index.dtos';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import axios from 'axios';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('chatrooms')
 export class ChatroomController {
-  constructor(private readonly chatroomService: ChatroomService) {}
+  constructor(
+    private readonly chatroomService: ChatroomService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post()
-  async createChatRoom(@Body() input: CreateChatroomDto) {
-    return await this.chatroomService.createChatRoom(input);
+  async createChatRoom(@Body() input: CreateChatroomDto, @Req() req) {
+    // Get country
+
+    let country = { country: 'KE' };
+    const ip = req.socket.remoteAddress as string;
+
+    if (ip.includes('127.0.0.')) {
+      return this.chatroomService.createChatRoom(input, country);
+    }
+
+    // Get user location
+
+    try {
+      const res = await axios.get('https://ipinfo.io/', {
+        params: {
+          token: this.configService.get('IPINFO_TOKEN'),
+        },
+      });
+      country = res.data;
+    } catch (error: any) {
+      country = {
+        country: 'N/A',
+      };
+    }
+
+    return this.chatroomService.createChatRoom(input, country);
   }
 
   @Get(':orgId')

@@ -14,7 +14,10 @@ export class ChatroomService {
     private readonly redisPubSubService: RedisPubSubService,
   ) {}
 
-  async createChatRoom({ chatbotId, email, name, country }: CreateChatroomDto) {
+  async createChatRoom(
+    { chatbotId, email, name }: CreateChatroomDto,
+    country: object,
+  ) {
     // Create chatroom
     const chatroom = await this.dbService.chatroom.create({
       data: {

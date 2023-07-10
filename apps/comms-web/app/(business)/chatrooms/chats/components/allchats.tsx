@@ -19,9 +19,7 @@ const ChatItem = ({ chatroom }: { chatroom: IChatroom }) => {
         className="relative h-8 w-8 rounded-full bg-gray-100  "
       >
         <Avatar className="flex h-8  w-8 items-center">
-          <AvatarFallback>
-            {chatroom.country?.country.slice(0, 2)}
-          </AvatarFallback>
+          <AvatarFallback>{chatroom.country?.country}</AvatarFallback>
         </Avatar>
       </Button>
       <div className="flex w-full  flex-col items-baseline">

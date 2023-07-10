@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-import { createChatbot, getCountry } from "@/lib/fetchers"
+import { createChatbot } from "@/lib/fetchers"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -46,11 +46,9 @@ export const UserForm = () => {
       description: "Authenticating and creating your chat session",
     })
     // get country
-    const location = await getCountry()
     const data = await createChatbot({
       ...values,
       chatbotId: chatbot?.id,
-      country: location,
     })
     setChatroom(data.chatroom)
     setAuthToken(data.authToken)

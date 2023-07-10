@@ -35,18 +35,6 @@ export const createChatbot = async (data: any) => {
   }
 }
 
-export const getCountry = async () => {
-  try {
-    const res = await axios.get("https://ipinfo.io/", {
-      params: {
-      token:process.env.NEXT_PUBLIC_IPINFO_TOKEN
-    }})
-    return res.data
-  } catch (error: any) {
-    errorParser(error)
-  }
-}
-
 export const errorParser = (error: AxiosError) => {
   if (error.response) {
     const { data } = error.response as any
