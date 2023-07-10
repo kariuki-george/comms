@@ -28,6 +28,7 @@ services:
       - traefik.http.routers.comms-api.tls=true
       - traefik.http.routers.comms-api.tls.certresolver=lets-encrypt
       - traefik.port=54000
+      
   comms-web: 
     hostname: comms-web
     image: comms-web:latest
