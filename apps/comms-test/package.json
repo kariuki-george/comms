@@ -24,6 +24,7 @@
     "@radix-ui/react-toast": "^1.1.4",
     "@tanstack/react-table": "^8.9.3",
     "axios": "^1.4.0",
+    "bufferutil": "^4.0.7",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
     "lucide-react": "0.105.0-alpha.4",
@@ -37,6 +38,7 @@
     "socket.io-client": "^4.7.1",
     "tailwind-merge": "^1.13.2",
     "tailwindcss-animate": "^1.0.6",
+    "utf-8-validate": "^5.0.10",
     "zod": "^3.21.4",
     "zustand": "^4.3.9"
   },

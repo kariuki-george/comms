@@ -28,10 +28,10 @@ const Chat = () => {
   }, [])
 
   const socketInitializer = async () => {
-    socket = io(process.env.NEXT_PUBLIC_API_URL as string, {
+    socket = io(process.env.NEXT_PUBLIC_WS_URL as string, {
       extraHeaders: { aid: authToken },
       reconnectionAttempts: 5,
-    })
+    }).connect()
 
     socket.on("chats", (msg: IMessage) => {
       setChats((prev) => [...prev, { ...msg, createdAt: new Date() }])

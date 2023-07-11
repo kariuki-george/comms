@@ -14,6 +14,7 @@ import { AuthenticatedSocket } from '@ws/types/index.types';
 @WebSocketGateway({
   cors: { origin: '*', allowedHeaders: ['aid'] },
   allowUpgrades: true,
+  transports: ['websocket', 'polling'],
 })
 export class EventsGateway {
   constructor(private readonly chatroomService: ChatroomService) {}

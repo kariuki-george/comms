@@ -1,36 +1,44 @@
 "use client"
 
 import React, { MutableRefObject, useEffect, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/state/auth.state"
 import { useChatState } from "@/state/chat.state"
+import { useMutation, useQuery } from "react-query"
 import { Socket, io } from "socket.io-client"
 import { useStore } from "zustand"
 
-import { IChatroom } from "@/types/chatroom"
 import { IMessage } from "@/types/message"
+import { siteConfig } from "@/config/site"
+import { closeChatroom, getMessages } from "@/lib/fetchers"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import ChatBubble from "@/components/chats/chatBubble"
 
 interface Props {
-  chatroomId: string
+  chatroomId: number
 }
 
 let socket: Socket | null = null
 
 const Chat = ({ chatroomId }: Props) => {
   // Chatroom
-  const { chatrooms, addMessage } = useStore(useChatState, (state) => state)
 
-  const [chatroom, setChatroom] = useState<IChatroom>()
+  const { chatrooms } = useStore(useChatState, (state) => state)
+  const authToken = useAuthStore((state) => state.authToken)
+  // Messages
   const [messages, setMessages] = useState<IMessage[]>([])
 
-  useEffect(() => {
-    setChatroom(chatrooms[Number(chatroomId)].chatroom)
-    setMessages(chatrooms[Number(chatroomId)].messages)
-  }, [])
+  // Get all messages
+  const { refetch } = useQuery({
+    queryKey: "chatrooms-messages-" + chatroomId,
+    queryFn: () => getMessages(chatroomId),
+    onSuccess: ({ data }) => {
+      setMessages(data)
+    },
+    refetchOnWindowFocus: false,
+  })
 
-  const authToken = useAuthStore((state) => state.authToken)
   // Socket io
 
   const [message, setMessage] = useState<string>("")
@@ -43,35 +51,61 @@ const Chat = ({ chatroomId }: Props) => {
     }
   }, [])
 
-  const socketInitializer = async () => {
-    socket = io(process.env.NEXT_PUBLIC_API_URL as string, {
-      extraHeaders: { aid: authToken },
+  const socketInitializer = () => {
+    socket = io(process.env.NEXT_PUBLIC_WS_URL as string, {
       reconnectionAttempts: 5,
-    })
+      extraHeaders: {
+        aid: authToken,
+      },
+    }).connect()
 
-    socket.on("connect", () => {
-      console.log("Connect")
-    })
+    console.log(socket)
 
     socket.on("chats", (msg: IMessage) => {
       msg.createdAt = new Date()
+      console.log(msg)
       setMessages((prev) => [...prev, msg])
-      addMessage(msg, Number(chatroomId))
     })
 
+    socket.on("connect_error", (error: any) => {
+      console.log("Connection error:", error)
+    })
     socket.on("error", (error) => {
       console.log("ERROR", error)
     })
     socket.on("reconnect_failed", () => {
       window.location.reload()
     })
+
+    socket.on("connect", () => {
+      console.log("connected")
+    })
+
+    socket.on("reconnect", () => {
+      refetch()
+    })
+
+    socket.on("disconnect", (reason) => {
+      console.log(reason)
+    })
+  }
+
+  // Handle close chatroom
+  const router = useRouter()
+  const { mutate, isLoading } = useMutation({
+    mutationFn: closeChatroom,
+    onSuccess: () => {
+      router.replace(siteConfig.nav.chats.chats)
+    },
+  })
+  const handleClose = () => {
+    mutate(chatroomId)
   }
 
   // Handle send message
 
   const handleSend = (e: any) => {
     e.preventDefault()
-
     socket?.emit("chats", { message, chatroomId: Number(chatroomId) })
     setMessage("")
   }
@@ -95,9 +129,17 @@ const Chat = ({ chatroomId }: Props) => {
     <div className="relative flex h-full w-full flex-col  justify-between overflow-hidden">
       {/* Header */}
       <div className="sticky bottom-0 flex items-center justify-between px-5 py-3 ">
-        <span className="text-lg font-semibold">{chatroom?.userName}</span>
+        <span className="text-lg font-semibold">
+          {chatrooms[chatroomId]?.userName}
+        </span>
         <span>
-          <Button variant={"outline"}>Close</Button>
+          <Button
+            disabled={isLoading}
+            onClick={handleClose}
+            variant={"outline"}
+          >
+            Close
+          </Button>
         </span>
       </div>
       {/* Chat's space */}

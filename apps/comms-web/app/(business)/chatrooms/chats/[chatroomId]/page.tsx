@@ -6,7 +6,7 @@ export default function Page({ params }: { params: { chatroomId: string } }) {
     <div className="flex w-full ">
       {/* Chat space */}
       <div className="w-4/5 border-r ">
-        <Chat chatroomId={params.chatroomId} />
+        <Chat chatroomId={Number(params.chatroomId)} />
       </div>
       {/* User info  */}
       {/* Chatroom: {params.chatroomId} */}

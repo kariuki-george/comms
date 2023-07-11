@@ -10,15 +10,13 @@ interface Props {
 
 const UserBar = ({ chatroomId }: Props) => {
   const state = useStore(useChatState, (state) => state)
-  const chatbot = state?.chatrooms[Number(chatroomId)]
+  const chatroom = state?.chatrooms[Number(chatroomId)]
   return (
     <div className="flex flex-col ">
       <span className="h-16 border-b p-4 text-lg font-semibold">Details</span>
-      <span className="gap-1 p-2">Name: {chatbot?.chatroom.userName}</span>
-      <span className="gap-1 p-2">Email: {chatbot?.chatroom.userEmail}</span>
-      <span className="gap-1 p-2">
-        Country: {chatbot?.chatroom.country.country}
-      </span>
+      <span className="gap-1 p-2">Name: {chatroom?.userName}</span>
+      <span className="gap-1 p-2">Email: {chatroom?.userEmail}</span>
+      <span className="gap-1 p-2">Country: {chatroom?.country?.country}</span>
     </div>
   )
 }

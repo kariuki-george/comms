@@ -15,3 +15,8 @@ export class MessageDto {
   @IsInt()
   chatroomId: number;
 }
+
+export class CloseChatroomDto {
+  @IsInt()
+  chatroomId: number;
+}

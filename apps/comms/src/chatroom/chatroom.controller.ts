@@ -5,11 +5,12 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { ChatroomService } from './chatroom.service';
-import { CreateChatroomDto } from './dtos/index.dtos';
+import { CloseChatroomDto, CreateChatroomDto } from './dtos/index.dtos';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
@@ -27,7 +28,9 @@ export class ChatroomController {
 
     let country = { country: 'KE' };
     const ip = req.socket.remoteAddress as string;
+    console.log(ip);
 
+    // For localhosts
     if (ip.includes('127.0.0.')) {
       return this.chatroomService.createChatRoom(input, country);
     }
@@ -35,7 +38,7 @@ export class ChatroomController {
     // Get user location
 
     try {
-      const res = await axios.get('https://ipinfo.io/', {
+      const res = await axios.get('https://ipinfo.io/' + ip, {
         params: {
           token: this.configService.get('IPINFO_TOKEN'),
         },
@@ -50,27 +53,36 @@ export class ChatroomController {
     return this.chatroomService.createChatRoom(input, country);
   }
 
-  @Get(':orgId')
+  @Get()
   @UseGuards(AuthGuard)
-  getNewChatbots(@Param('orgId') orgId: string) {
+  getNewChatrooms(@Query('orgId') orgId: string, @Req() req) {
     if (!Number(orgId)) {
-      throw new BadRequestException('No orgId param defined');
+      return this.chatroomService.getMyChatrooms(req.user.id);
     }
     return this.chatroomService.getNewChatroom(Number(orgId));
   }
 
-  @Post(':chatroomId')
+  @Post('/join')
   @UseGuards(AuthGuard)
-  async joinChatroom(@Req() req, @Param('chatroomId') chatroomId: string) {
+  async joinChatroom(@Req() req, @Query('chatroomId') chatroomId: string) {
     if (!Number(chatroomId)) {
       throw new BadRequestException('ChatroomId param not defined');
     }
     return this.chatroomService.joinChatRoom(Number(chatroomId), req.user);
   }
 
-  @Get()
+  @Get('/messages')
   @UseGuards(AuthGuard)
-  getChatrooms(@Req() req) {
-    return this.chatroomService.getMyChatrooms(req.user.id);
+  getAllMessages(@Query('chatroomId') chatroomId: string) {
+    if (!Number(chatroomId)) {
+      throw new BadRequestException('ChatroomId query not defined');
+    }
+    return this.chatroomService.getAllMessages(Number(chatroomId));
+  }
+
+  @Post('/close')
+  @UseGuards(AuthGuard)
+  closeChatroom(@Body() { chatroomId }: CloseChatroomDto) {
+    return this.chatroomService.closeChatroom(chatroomId);
   }
 }

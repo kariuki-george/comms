@@ -77,4 +77,18 @@ export class ChatroomService {
       },
     });
   }
+  getAllMessages(chatroomId: number) {
+    return this.dbService.message.findMany({ where: { chatroomId } });
+  }
+
+  closeChatroom(chatroomId: number) {
+    return this.dbService.chatroom.update({
+      where: {
+        id: chatroomId,
+      },
+      data: {
+        status: 'CLOSED',
+      },
+    });
+  }
 }

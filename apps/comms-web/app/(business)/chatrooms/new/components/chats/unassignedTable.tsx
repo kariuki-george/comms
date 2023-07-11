@@ -30,7 +30,7 @@ const UnassignedTable = () => {
   const { data } = useQuery({
     queryFn: getNewChatrooms,
     queryKey: "chatrooms",
-    refetchInterval: 1000,
+    refetchInterval: 10000, // Poll every 10 seconds
   })
 
   // Handle join
