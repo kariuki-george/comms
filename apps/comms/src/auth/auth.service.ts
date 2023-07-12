@@ -8,12 +8,7 @@ import { LoginDto } from './dtos/index.dto';
 import { verify } from 'argon2';
 import { sign, verify as jwtVerify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { UserRes } from 'src/users/res';
-
-export interface LoginRes {
-  user: UserRes;
-  authJWT: string;
-}
+import { LoginRes } from './res/index.res';
 
 @Injectable()
 export class AuthService {

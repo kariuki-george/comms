@@ -19,6 +19,7 @@ import { AuthenticatedSocket } from '@ws/types/index.types';
 export class EventsGateway {
   constructor(private readonly chatroomService: ChatroomService) {}
   @SubscribeMessage('chats')
+
   // @UseInterceptors(RedisPropagatorInterceptor)
   @UseGuards(AuthGuard)
   async addMessage(

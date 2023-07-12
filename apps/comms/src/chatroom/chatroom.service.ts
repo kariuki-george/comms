@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateChatroomDto, MessageDto } from './dtos/index.dtos';
 import { DBService } from '@db';
 import { AuthService } from 'src/auth/auth.service';

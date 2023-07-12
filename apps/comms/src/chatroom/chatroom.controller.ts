@@ -3,7 +3,7 @@ import {
   Body,
   Controller,
   Get,
-  Param,
+  HttpCode,
   Post,
   Query,
   Req,
@@ -14,8 +14,16 @@ import { CloseChatroomDto, CreateChatroomDto } from './dtos/index.dtos';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiHeader,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller('chatrooms')
+@ApiTags('Chatrooms')
 export class ChatroomController {
   constructor(
     private readonly chatroomService: ChatroomService,
@@ -23,6 +31,9 @@ export class ChatroomController {
   ) {}
 
   @Post()
+  @HttpCode(201)
+  @ApiCreatedResponse({ description: 'Chatroom created successfully' })
+  @ApiBadRequestResponse({ description: 'Invalid DTO' })
   async createChatRoom(@Body() input: CreateChatroomDto, @Req() req) {
     // Get country
 
@@ -54,7 +65,18 @@ export class ChatroomController {
   }
 
   @Get()
+  @ApiOkResponse({
+    isArray: true,
+    description:
+      'Returns a list chatrooms an agent is subscribed to else all new chatrooms',
+  })
   @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'aid',
+    allowEmptyValue: false,
+
+    required: true,
+  })
   getNewChatrooms(@Query('orgId') orgId: string, @Req() req) {
     if (!Number(orgId)) {
       return this.chatroomService.getMyChatrooms(req.user.id);
@@ -63,7 +85,19 @@ export class ChatroomController {
   }
 
   @Post('/join')
+  @ApiOkResponse({
+    description: 'Joined a chatroom successfully',
+  })
+  @ApiBadRequestResponse({
+    description: 'Chatroom Id query param is missing, ',
+  })
   @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'aid',
+    allowEmptyValue: false,
+
+    required: true,
+  })
   async joinChatroom(@Req() req, @Query('chatroomId') chatroomId: string) {
     if (!Number(chatroomId)) {
       throw new BadRequestException('ChatroomId param not defined');
@@ -73,6 +107,19 @@ export class ChatroomController {
 
   @Get('/messages')
   @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'aid',
+    allowEmptyValue: false,
+
+    required: true,
+  })
+  @ApiOkResponse({
+    description: 'A list of all messages belonging to a chatroom',
+    isArray: true,
+  })
+  @ApiBadRequestResponse({
+    description: 'Chatroom Id query param is missing, ',
+  })
   getAllMessages(@Query('chatroomId') chatroomId: string) {
     if (!Number(chatroomId)) {
       throw new BadRequestException('ChatroomId query not defined');
@@ -81,7 +128,19 @@ export class ChatroomController {
   }
 
   @Post('/close')
+  @ApiOkResponse({
+    description: 'Closed a chatroom successfully',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid DTO',
+  })
   @UseGuards(AuthGuard)
+  @ApiHeader({
+    name: 'aid',
+    allowEmptyValue: false,
+
+    required: true,
+  })
   closeChatroom(@Body() { chatroomId }: CloseChatroomDto) {
     return this.chatroomService.closeChatroom(chatroomId);
   }

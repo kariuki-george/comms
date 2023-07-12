@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Server } from 'socket.io';
-import { SocketStateService } from './socket-state.service';
 import { RedisSocketEventSendDto } from './dtos/index.dtos';
 import { tap } from 'rxjs';
 import { RedisPubSubService } from '@redis';
