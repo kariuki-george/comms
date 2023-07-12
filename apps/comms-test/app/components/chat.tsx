@@ -34,7 +34,7 @@ const Chat = () => {
     }).connect()
 
     socket.on("chats", (msg: IMessage) => {
-      setChats((prev) => [...prev, { ...msg, createdAt: new Date() }])
+      setChats((prev) => [...prev, msg])
     })
 
     socket.on("error", (error) => {
@@ -77,7 +77,7 @@ const Chat = () => {
           <li className="w-full  p-2  " key={message.id}>
             <ChatBubble
               message={message.message}
-              createdAt={message.createdAt}
+              createdAt={message.sentAt}
               isSender={message.sender === "USER"}
             />
           </li>

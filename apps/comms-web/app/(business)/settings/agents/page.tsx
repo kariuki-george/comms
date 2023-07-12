@@ -22,7 +22,7 @@ const AgentsPage = () => {
         <span>Create, update and delete agents</span>
         <div className="flex   w-1/2 flex-col ">
           <div className="my-4 w-full border-b text-lg font-semibold  ">
-            Chatbots
+            Agents
           </div>
           <ul className="flex w-full flex-col gap-3">
             {agents.map((agent) => (

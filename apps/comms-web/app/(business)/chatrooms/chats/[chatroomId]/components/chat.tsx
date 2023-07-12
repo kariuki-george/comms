@@ -62,7 +62,6 @@ const Chat = ({ chatroomId }: Props) => {
     console.log(socket)
 
     socket.on("chats", (msg: IMessage) => {
-      msg.createdAt = new Date()
       console.log(msg)
       setMessages((prev) => [...prev, msg])
     })
@@ -149,7 +148,7 @@ const Chat = ({ chatroomId }: Props) => {
             <ChatBubble
               message={message.message}
               isSender={message.sender === "AGENT"}
-              createdAt={message.createdAt}
+              createdAt={message.sentAt}
             />
           </li>
         ))}

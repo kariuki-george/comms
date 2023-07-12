@@ -9,5 +9,5 @@ export interface IChatroom {
   updatedAt: Date
   userEmail: string
   userName: string
-  country: any
+  location: any
 }

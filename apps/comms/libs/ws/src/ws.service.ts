@@ -12,8 +12,12 @@ export class WSService {
 
     //   Emit to user and agents
 
+    const agentIdSockets = Chatroom.agentId
+      ? this.socketStateService.get(Chatroom.agentId.toString())
+      : [];
+
     [
-      ...this.socketStateService.get(Chatroom.agentId.toString()),
+      ...agentIdSockets,
       ...this.socketStateService.get(Chatroom.userEmail),
     ].forEach((socket: AuthenticatedSocket) => {
       socket.emit('chats', { message, chatroomId, sender, id });

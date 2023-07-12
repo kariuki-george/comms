@@ -35,6 +35,15 @@ export const createChatbot = async (data: any) => {
   }
 }
 
+export const getIp = async () => {
+  try {
+    const res = await axios.get("https://api.ipify.org/?format=json")
+    return res.data
+  } catch (error: any) {
+    errorParser(error)
+  }
+}
+
 export const errorParser = (error: AxiosError) => {
   if (error.response) {
     const { data } = error.response as any

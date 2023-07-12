@@ -6,6 +6,7 @@ import socketio from 'socket.io';
 import { AuthenticatedSocket } from './types/index.types';
 import { WsException } from '@nestjs/websockets';
 import { decode } from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
 export class SocketStateAdapter extends IoAdapter implements WebSocketAdapter {
   private server: socketio.Server;
@@ -13,6 +14,7 @@ export class SocketStateAdapter extends IoAdapter implements WebSocketAdapter {
     private readonly app: INestApplicationContext,
     private readonly socketStateService: SocketStateService,
     private readonly redisPropagatorService: RedisPropagatorService,
+    private readonly configService: ConfigService,
   ) {
     super(app);
   }
@@ -21,7 +23,20 @@ export class SocketStateAdapter extends IoAdapter implements WebSocketAdapter {
     port: number,
     options: socketio.ServerOptions,
   ): socketio.Server {
-    this.server = super.createIOServer(port, options);
+    this.server = super.createIOServer(port, {
+      ...options,
+      cors: {
+        ...options.cors,
+        origin:
+          this.configService.get<string>('NODE_ENV') &&
+          this.configService.get<string>('NODE_ENV') === 'production'
+            ? [
+                'https://comms.p.kariukigeorge.me',
+                'https://comms-test.p.kariukigeorge.me',
+              ]
+            : '*',
+      },
+    });
     this.redisPropagatorService.injectSocketServer(this.server);
 
     this.server.use(async (socket: AuthenticatedSocket, next) => {

@@ -3,5 +3,5 @@ export interface IMessage {
   chatroomId: string
   sender: "USER" | "AGENT"
   id: number
-  createdAt: Date
+  sentAt: Date
 }

@@ -29,5 +29,7 @@ export const siteConfig = {
       new: "/chatrooms/new",
       chats: "/chatrooms/chats",
     },
+    docs: "https://api.comms.p.kariukigeorge.me/api",
+    commstest: "https://comms-test.p.kariukigeorge.me",
   },
 }

@@ -67,7 +67,7 @@ const UnassignedTable = () => {
                 <TableRow key={chatroom.id}>
                   <TableHead>{chatroom.userName}</TableHead>
                   <TableHead>{chatroom.userEmail}</TableHead>
-                  <TableHead>{chatroom.country?.country}</TableHead>
+                  <TableHead>{chatroom.location?.country}</TableHead>
                   <TableHead className="">
                     <Button
                       onClick={() => handleJoin(chatroom.id)}

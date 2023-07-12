@@ -16,7 +16,7 @@ export class ChatroomService {
 
   async createChatRoom(
     { chatbotId, email, name }: CreateChatroomDto,
-    country: object,
+    location: object,
   ) {
     // Create chatroom
     const chatroom = await this.dbService.chatroom.create({
@@ -24,7 +24,7 @@ export class ChatroomService {
         userEmail: email,
         userName: name,
         chatbotId,
-        country,
+        location,
       },
     });
 

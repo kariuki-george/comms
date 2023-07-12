@@ -34,34 +34,20 @@ export class ChatroomController {
   @HttpCode(201)
   @ApiCreatedResponse({ description: 'Chatroom created successfully' })
   @ApiBadRequestResponse({ description: 'Invalid DTO' })
-  async createChatRoom(@Body() input: CreateChatroomDto, @Req() req) {
-    // Get country
-
-    let country = { country: 'KE' };
-    const ip = req.socket.remoteAddress as string;
-    console.log(ip);
-
-    // For localhosts
-    if (ip.includes('127.0.0.')) {
-      return this.chatroomService.createChatRoom(input, country);
-    }
-
-    // Get user location
-
+  async createChatRoom(@Body() input: CreateChatroomDto) {
+    // Get location
+    let location = {};
     try {
-      const res = await axios.get('https://ipinfo.io/' + ip, {
+      const res = await axios.get('https://ipinfo.io/' + input.ipaddress, {
         params: {
           token: this.configService.get('IPINFO_TOKEN'),
         },
       });
-      country = res.data;
+      location = res.data;
     } catch (error: any) {
-      country = {
-        country: 'N/A',
-      };
+      location = { country: 'N/A' };
     }
-
-    return this.chatroomService.createChatRoom(input, country);
+    return this.chatroomService.createChatRoom(input, location);
   }
 
   @Get()

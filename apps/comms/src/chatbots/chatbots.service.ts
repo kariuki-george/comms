@@ -45,6 +45,10 @@ export class ChatbotsService {
   }
 
   deleteChatbot(chatbotId: number) {
-    return this.dbService.chatbot.delete({ where: { id: chatbotId } });
+    try {
+      return this.dbService.chatbot.delete({ where: { id: chatbotId } });
+    } catch (error) {
+      throw new BadRequestException("Can't delete chatbot at the moment");
+    }
   }
 }

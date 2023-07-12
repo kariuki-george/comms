@@ -13,13 +13,21 @@ export default function IndexPage() {
           Message your customers, <br />
           they&apos;ll love you for it
         </h1>
-
         <section className="flex gap-3">
           <Link href={siteConfig.nav.auth.register}>
             <Button>Sign Up It&apos;s Free</Button>
           </Link>
           <Link href={siteConfig.nav.auth.login}>
             <Button variant={"secondary"}>Welcome Back</Button>
+          </Link>
+        </section>
+        or
+        <section className="flex gap-3">
+          <Link target="_blank" href={siteConfig.nav.docs}>
+            <Button variant={"secondary"}>Docs/ Api</Button>
+          </Link>
+          <Link target="_blank" href={siteConfig.nav.commstest}>
+            <Button variant={"secondary"}>Simulate User</Button>
           </Link>
         </section>
       </div>

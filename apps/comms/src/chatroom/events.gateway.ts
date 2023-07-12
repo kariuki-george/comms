@@ -12,7 +12,9 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { AuthenticatedSocket } from '@ws/types/index.types';
 
 @WebSocketGateway({
-  cors: { origin: '*', allowedHeaders: ['aid'] },
+  cors: {
+    allowedHeaders: ['aid'],
+  },
   allowUpgrades: true,
   transports: ['websocket', 'polling'],
 })
