@@ -18,7 +18,9 @@ const Header = () => {
     <header className="h-30 sticky top-0 z-40 flex w-full justify-between border-b bg-background px-10 py-3">
       {/* Organisation */}
       <Link href={siteConfig.nav.dashboard}>
-        <span className="text-xl font-semibold">{org?.name}</span>
+        <span className="text-xl font-semibold">
+          {org?.name || siteConfig.name}
+        </span>
       </Link>
       {/* User routes */}
       <span>

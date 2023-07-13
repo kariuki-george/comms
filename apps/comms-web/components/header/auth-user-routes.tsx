@@ -2,8 +2,10 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useQuery } from "react-query"
 
 import { siteConfig } from "@/config/site"
+import { getNewChatrooms } from "@/lib/fetchers"
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -52,6 +54,13 @@ const settingsComponents: NavProps[] = [
 ]
 
 const AuthenticatedRoutes = () => {
+  // Fetch new chats
+  const { data } = useQuery({
+    queryFn: getNewChatrooms,
+    queryKey: "chatrooms",
+    refetchInterval: 10000, // Poll every 10 seconds
+  })
+
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -63,7 +72,12 @@ const AuthenticatedRoutes = () => {
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Chats</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="relative ">
+            Chats
+            {data?.data.length > 0 && (
+              <span className="bg-red-700 h-2 w-2 absolute right-1 top-1 rounded-full" />
+            )}
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
               {components.map((component) => (

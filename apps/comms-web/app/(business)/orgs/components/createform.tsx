@@ -1,13 +1,11 @@
 "use client"
 
-import Link from "next/link"
-import { useOrgState } from "@/state/org.state"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useMutation } from "react-query"
 import * as z from "zod"
 
-import { createChatbot } from "@/lib/fetchers"
+import { createOrg } from "@/lib/fetchers"
 import { queryClient } from "@/lib/providers/reactquery.provider"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,24 +22,23 @@ import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
   name: z.string().min(3, {
-    message: "Chatbot name must be at least 3 characters.",
+    message: "Organization name must be at least 3 characters.",
   }),
 })
 
-const ChatbotForm = () => {
+const OrgForm = () => {
   const { toast } = useToast()
-  const org = useOrgState((state) => state.org)
   const { mutate, isLoading } = useMutation({
-    mutationFn: createChatbot,
+    mutationFn: createOrg,
     onSuccess: () => {
-      toast({ description: "Created chatbot successfully" })
-      queryClient.invalidateQueries("chatbots")
+      toast({ description: "Created organization successfully" })
+      queryClient.invalidateQueries("orgs")
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
-    mutate({ name: values.name, orgId: org?.id })
+    mutate(values)
   }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,7 +62,7 @@ const ChatbotForm = () => {
               <FormControl>
                 <Input placeholder="Name" {...field} />
               </FormControl>
-              <FormDescription>This is your chatbot name.</FormDescription>
+              <FormDescription>This is your org name.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -77,4 +74,4 @@ const ChatbotForm = () => {
     </Form>
   )
 }
-export default ChatbotForm
+export default OrgForm

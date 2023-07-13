@@ -13,7 +13,8 @@ import { siteConfig } from "@/config/site"
 import { closeChatroom, getMessages } from "@/lib/fetchers"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import ChatBubble from "@/components/chats/chatBubble"
+
+import ChatBubble from "./chatBubble"
 
 interface Props {
   chatroomId: number
@@ -133,7 +134,7 @@ const Chat = ({ chatroomId }: Props) => {
         </span>
         <span>
           <Button
-            disabled={isLoading}
+            isLoading={isLoading}
             onClick={handleClose}
             variant={"outline"}
           >

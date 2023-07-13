@@ -51,7 +51,11 @@ const Chatbot = ({ chatbot }: Props) => {
             <Copy className="h-5 w-5" />
           </Button>
 
-          <Button onClick={handleDelete} disabled={isLoading} variant={"ghost"}>
+          <Button
+            onClick={handleDelete}
+            isLoading={isLoading}
+            variant={"ghost"}
+          >
             <Trash className="h-5 w-5" />
           </Button>
         </span>

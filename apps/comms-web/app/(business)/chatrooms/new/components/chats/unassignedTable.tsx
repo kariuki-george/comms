@@ -1,14 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
+import React from "react"
 import { useRouter } from "next/navigation"
 import { useChatState } from "@/state/chat.state"
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
 import { useMutation, useQuery } from "react-query"
 
 import { IChatroom } from "@/types/chatroom"
@@ -72,7 +66,7 @@ const UnassignedTable = () => {
                     <Button
                       onClick={() => handleJoin(chatroom.id)}
                       variant={"ghost"}
-                      disabled={isLoading}
+                      isLoading={isLoading}
                     >
                       Join
                     </Button>

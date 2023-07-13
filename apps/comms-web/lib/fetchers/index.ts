@@ -47,6 +47,12 @@ export const getOrgs = () => {
   return query(API + "orgs")
 }
 
+// Org
+
+export const createOrg = (data: any) => {
+  return postMutate(API + "orgs", data)
+}
+
 // Chatbots
 export const getChatbots = () => {
   return query(API + "chatbots/org/" + useOrgState.getState().org?.id)

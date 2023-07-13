@@ -134,7 +134,7 @@ export const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit" disabled={isLoading}>
+        <Button className="w-full" type="submit" isLoading={isLoading}>
           Submit
         </Button>
       </form>
