@@ -63,6 +63,7 @@ export class ChatroomController {
 
     required: true,
   })
+  // NOTE: This will return chatrooms belonging to a user but on different orgs too. 😢
   getNewChatrooms(@Query('orgId') orgId: string, @Req() req) {
     if (!Number(orgId)) {
       return this.chatroomService.getMyChatrooms(req.user.id);

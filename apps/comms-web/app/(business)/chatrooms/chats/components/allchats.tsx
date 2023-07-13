@@ -41,7 +41,7 @@ const AllActiveChats = () => {
   })
   return (
     <div className="flex  h-full  w-1/5 min-w-[250px]  overflow-auto border-r">
-      {data?.data ? (
+      {data?.data && data.data.length > 0 ? (
         <ul className="flex h-full w-full flex-col  ">
           {data.data.map((chatroom: IChatroom) => (
             <Link
