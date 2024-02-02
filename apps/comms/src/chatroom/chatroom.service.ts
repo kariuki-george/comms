@@ -44,13 +44,25 @@ export class ChatroomService {
     // Save the message
     const data = await this.dbService.message.create({
       data: { ...input, sender: user.sender ?? 'AGENT' },
-      include: { Chatroom: true },
+      include: {
+        Chatroom: { select: { agentId: true } },
+      },
     });
 
-    // Broadcast the message
-    await this.redisPubSubService.publish(PubSubChannels.add_message, data);
+    await this.redisPubSubService.publish(
+      PubSubChannels.ADD_MESSAGE,
+      JSON.stringify({
+        message: data.message,
+        userId: user.id,
+        sender: data.sender,
+        sentAt: data.sentAt,
+        readAt: data.readAt,
+        chatroomId: data.chatroomId,
+        id: data.id,
+        agentId: data.Chatroom.agentId,
+      }),
+    );
 
-    delete data.Chatroom;
     return data;
   }
 
@@ -81,7 +93,14 @@ export class ChatroomService {
     return this.dbService.message.findMany({ where: { chatroomId } });
   }
 
-  closeChatroom(chatroomId: number) {
+  async closeChatroom(chatroomId: number) {
+    await this.redisPubSubService.publish(
+      PubSubChannels.CLOSE_CHATROOM,
+      JSON.stringify({
+        chatroomId,
+      }),
+    );
+
     return this.dbService.chatroom.update({
       where: {
         id: chatroomId,

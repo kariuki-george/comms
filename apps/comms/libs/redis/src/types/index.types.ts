@@ -1,4 +1,6 @@
-export const PubSubChannels = {
-  add_message: 'ADD_MESSAGE',
-  create_chatroom: 'CREATE_CHATROOM',
-};
+export enum PubSubChannels {
+  ADD_MESSAGE = 'ADD_MESSAGE',
+  CREATE_CHATROOM = 'ADD_MESSAGE',
+  JOIN_CHATROOM = 'ADD_MESSAGE',
+  CLOSE_CHATROOM = 'ADD_MESSAGE',
+}

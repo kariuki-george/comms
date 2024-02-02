@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ChatroomService } from './chatroom.service';
 import { ChatroomController } from './chatroom.controller';
-import { EventsGateway } from './events.gateway';
+import { ChatroomGateway } from './chatroom.gateway';
+import { ChatroomWs } from './chatroom.ws.service';
+import { WsModule } from '@ws';
 
 @Module({
   controllers: [ChatroomController],
-  providers: [ChatroomService, EventsGateway],
+  providers: [ChatroomService, ChatroomGateway, ChatroomWs],
+  imports: [WsModule],
 })
 export class ChatroomModule {}

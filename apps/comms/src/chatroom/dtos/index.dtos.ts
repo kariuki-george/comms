@@ -1,3 +1,4 @@
+import { Chatroom } from '@prisma/client';
 import { IsEmail, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateChatroomDto {
@@ -21,4 +22,12 @@ export class MessageDto {
 export class CloseChatroomDto {
   @IsInt()
   chatroomId: number;
+}
+
+export class AddMessageEventDto {
+  sender: 'USER' | 'AGENT';
+  message: string;
+  id: number;
+  chatroomId: number;
+  Chatroom: Chatroom;
 }

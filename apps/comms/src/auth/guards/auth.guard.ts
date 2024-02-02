@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   CanActivate,
   ExecutionContext,
   Injectable,
@@ -40,8 +41,10 @@ export class AuthGuard implements CanActivate {
     if (!aid) throw new WsException('Unauthorized');
     try {
       client.auth = this.authService.verifyWithJwt(aid);
+
       return true;
     } catch (error) {
+      // TODO: HANDLE ERROR MORE GRACEFULLY
       throw new WsException('Unauthorized');
     }
   }

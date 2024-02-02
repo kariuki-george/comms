@@ -1,7 +1,6 @@
 import { INestApplicationContext, WebSocketAdapter } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { SocketStateService } from './socket-state.service';
-import { RedisPropagatorService } from './redis-consumer.service';
 import socketio from 'socket.io';
 import { AuthenticatedSocket } from './types/index.types';
 import { WsException } from '@nestjs/websockets';
@@ -13,7 +12,6 @@ export class SocketStateAdapter extends IoAdapter implements WebSocketAdapter {
   public constructor(
     private readonly app: INestApplicationContext,
     private readonly socketStateService: SocketStateService,
-    private readonly redisPropagatorService: RedisPropagatorService,
     private readonly configService: ConfigService,
   ) {
     super(app);
@@ -37,24 +35,21 @@ export class SocketStateAdapter extends IoAdapter implements WebSocketAdapter {
             : '*',
       },
     });
-    this.redisPropagatorService.injectSocketServer(this.server);
 
     this.server.use(async (socket: AuthenticatedSocket, next) => {
       const token = socket.handshake.headers.aid as string;
 
+      // TODO: HANDLE ERROR MORE GRACEFULLY
       if (!token) {
         return next(new WsException('Unauthorised'));
       }
-
-      // A simple authentication for the token.
-      // Doesn't cross-check with the user
 
       const user = decode(token);
       if (!user) {
         return next(new WsException('Unauthorised'));
       }
 
-      socket.auth = user;
+      socket.user = user;
       next();
     });
 
@@ -63,12 +58,11 @@ export class SocketStateAdapter extends IoAdapter implements WebSocketAdapter {
   // eslint-disable-next-line @typescript-eslint/ban-types
   public bindClientConnect(server: socketio.Server, callback: Function): void {
     server.on('connection', (socket: AuthenticatedSocket) => {
-      if (socket.auth) {
-        console.log(socket.auth.id.toString());
-        this.socketStateService.add(socket.auth.id.toString(), socket);
+      if (socket.user) {
+        this.socketStateService.add(socket.user.id.toString(), socket);
 
         socket.on('disconnect', () => {
-          this.socketStateService.remove(socket.auth.id, socket);
+          this.socketStateService.remove(socket.user.id, socket);
         });
       }
 

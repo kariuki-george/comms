@@ -1,3 +1,3 @@
 import socketio from 'socket.io';
 
-export type AuthenticatedSocket = socketio.Socket & { auth: any };
+export type AuthenticatedSocket = socketio.Socket & { user: any };
