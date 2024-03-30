@@ -3,6 +3,7 @@ package main
 import (
 	"comms/internal/config"
 	"comms/internal/router"
+	"comms/internal/storage"
 	"fmt"
 	"net/http"
 	"os"
@@ -28,6 +29,8 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
+	log.Info().Msg("[COMMS]: Hello From Comms💬")
+
 	// Set the default location to East Africa Time (EAT)
 	location, err := time.LoadLocation(config.Server.Timezone)
 	if err != nil {
@@ -37,14 +40,16 @@ func main() {
 	time.Local = location
 	log.Info().Msg(fmt.Sprintf("[COMMS]: Set Timezone to %s", location))
 
-	log.Info().Msg("[COMMS]: Hello From Comms💬")
+	// Start database
+
+	database := storage.InitDB(config)
 
 	// Setup Server
 	log.Info().Msg(fmt.Sprintf("[COMMS]: Starting HTTP server on port:%d", config.Server.Port))
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%d", config.Server.Port),
-		Handler: router.InitRouter(config),
+		Handler: router.InitRouter(config, database),
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,

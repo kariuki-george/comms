@@ -17,8 +17,13 @@ type redisConfig struct {
 	Url string
 }
 
+type database struct {
+	Dsn string
+}
+
 type Config struct {
-	Server serverConfig
+	Server   serverConfig
+	Database database
 	// Redis  redisConfig
 }
 
@@ -44,6 +49,7 @@ func Init() *Config {
 			Timezone: viper.Get("TIMEZONE").(string),
 			ENV:      viper.Get("ENV").(string),
 		},
+		Database: database{Dsn: viper.Get("POSTGRES_DSN").(string)},
 		// Redis: redisConfig{
 		// 	Url: viper.Get("REDIS_URL").(string),
 		// },

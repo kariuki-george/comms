@@ -3,21 +3,24 @@ package router
 import (
 	"comms/internal/api"
 	"comms/internal/config"
+	"comms/internal/storage"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
 type Router struct {
-	router *mux.Router
-	config *config.Config
+	router  *mux.Router
+	config  *config.Config
+	storage storage.Storage
 }
 
-func InitRouter(config *config.Config) *Router {
+func InitRouter(config *config.Config, storage storage.Storage) *Router {
 
 	router := &Router{
-		router: mux.NewRouter(),
-		config: config,
+		router:  mux.NewRouter(),
+		config:  config,
+		storage: storage,
 	}
 	router.initRoutes()
 
@@ -48,6 +51,13 @@ func (apiRouter *Router) initRoutes() {
 
 	var router = apiRouter.router.PathPrefix("/api").Subrouter()
 	router.HandleFunc("/status", api.Health()).Methods(http.MethodGet, http.MethodOptions)
+
+	// User
+
+	router.HandleFunc("/users", api.CreateUser(apiRouter.storage)).Methods(http.MethodPost, http.MethodOptions)
+
+	// Auth
+	router.HandleFunc("/auth/login", api.Login(apiRouter.storage)).Methods(http.MethodPost, http.MethodOptions)
 
 	// WS
 
