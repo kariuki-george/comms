@@ -50,7 +50,7 @@ func (apiRouter *Router) initRoutes() {
 	//Default router
 
 	var router = apiRouter.router.PathPrefix("/api").Subrouter()
-	router.HandleFunc("/status", api.Health()).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc("/health", api.Health()).Methods(http.MethodGet, http.MethodOptions)
 
 	// User
 
