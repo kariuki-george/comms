@@ -2,6 +2,7 @@ package router
 
 import (
 	"comms/internal/api"
+	"comms/internal/utils"
 	"comms/model"
 	"errors"
 	"net/http"
@@ -40,7 +41,7 @@ func (wsManager *WSManager) setupEventHandlers() {
 
 }
 
-func (wsManager *WSManager) SendMessage(userId int, payload model.Event) {
+func (wsManager *WSManager) SendMessage(userId uint, payload model.Event) {
 	// Get socket
 	if client, ok := wsManager.clients[userId]; ok {
 		client.wchan <- payload
@@ -72,7 +73,7 @@ func (wsManager *WSManager) newWSConnection(w http.ResponseWriter, r *http.Reque
 
 	// TODO: Get authenticated user details from the request
 
-	userId := 1
+	safeUser := r.Context().Value(utils.CTX_SAFEUSER).(*model.SafeUser)
 
 	// Upgrade regular http connection into websocket
 
@@ -83,7 +84,7 @@ func (wsManager *WSManager) newWSConnection(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	client := NewClient(conn, wsManager, userId)
+	client := NewClient(conn, wsManager, (safeUser.Id))
 
 	wsManager.addClient(client)
 

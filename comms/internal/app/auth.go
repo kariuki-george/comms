@@ -47,7 +47,7 @@ func Login(store storage.Storage, config *config.Config, loginUser *model.LoginU
 	var safeLogin model.SafeLogin
 
 	// Create a jwt token
-	// TODO - Fix secret
+
 	tokenString, err := utils.GenerateJWT(utils.JWTClaims{UserId: int(user.ID),
 		Name:  user.Name,
 		Email: user.Email, ExpiresAt: time.Now().Add(24 * time.Hour), Nbf: time.Now(), IssuedAt: time.Now(), Issuer: "COMMS-AUTH", Subject: "AUTH", Audience: "AUTH"}, []byte(config.Auth.JwtSecret))

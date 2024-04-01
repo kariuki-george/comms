@@ -90,7 +90,4 @@ func (apiRouter *Router) initRoutes() {
 
 	authedRouter.HandleFunc("/ws", wsManager.serveWS()).Methods(http.MethodGet, http.MethodOptions)
 
-	// n := negroni.Classic()
-	// apiRouter.router.PathPrefix("/api").Handler()
-
 }

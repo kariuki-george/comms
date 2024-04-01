@@ -16,9 +16,9 @@ type Permission struct {
 
 type UserPermission struct {
 	gorm.Model
-	UserID       uint `gorm:"uniqueIndex:idx_user_role constraint:constraint:OnCreate,OnUpdate:RESTRICT,OnDelete:CASCADE"`
-	OrgID        uint `gorm:"uniqueIndex:idx_user_role constraint:constraint:OnCreate,OnUpdate:RESTRICT,OnDelete:CASCADE"`
-	PermissionID uint `gorm:"uniqueIndex:idx_user_role constraint:constraint:OnCreate,OnUpdate:RESTRICT,OnDelete:CASCADE"`
+	UserID       uint `gorm:"uniqueIndex:idx_user_role constraint:OnCreate:RESTRICT,OnUpdate:RESTRICT,OnDelete:CASCADE"`
+	OrgID        uint `gorm:"uniqueIndex:idx_user_role constraint:OnCreate:RESTRICT,OnUpdate:RESTRICT,OnDelete:CASCADE"`
+	PermissionID uint `gorm:"uniqueIndex:idx_user_role constraint:OnCreate:RESTRICT,OnUpdate:RESTRICT,OnDelete:CASCADE"`
 }
 
 type CreateUserPermission struct {

@@ -18,18 +18,18 @@ var (
 // A map of userId and client details
 // One will use the userId to get their client
 
-type ClientList map[int]*Client
+type ClientList map[uint]*Client
 
 type Client struct {
 	connection *websocket.Conn
 	wsmanager  *WSManager
-	userId     int
+	userId     uint
 
 	// Write channel
 	wchan chan model.Event
 }
 
-func NewClient(conn *websocket.Conn, wsmanager *WSManager, userId int) *Client {
+func NewClient(conn *websocket.Conn, wsmanager *WSManager, userId uint) *Client {
 	return &Client{
 		connection: conn,
 		wsmanager:  wsmanager,
