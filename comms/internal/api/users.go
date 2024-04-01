@@ -3,11 +3,12 @@ package api
 import (
 	"comms/internal/app"
 	"comms/internal/storage"
+	"comms/internal/utils"
 	"comms/model"
 	"net/http"
 )
 
-func CreateUser(store storage.Storage) http.HandlerFunc {
+func CreateUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// Get user from body
@@ -27,6 +28,7 @@ func CreateUser(store storage.Storage) http.HandlerFunc {
 		if err != nil {
 			return
 		}
+		store := r.Context().Value(utils.CTX_STORE).(storage.Storage)
 
 		safeUser, err := app.CreateUser(store, &createUser)
 

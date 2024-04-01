@@ -2,12 +2,14 @@ package api
 
 import (
 	"comms/internal/app"
+	"comms/internal/config"
 	"comms/internal/storage"
+	"comms/internal/utils"
 	"comms/model"
 	"net/http"
 )
 
-func Login(store storage.Storage) http.HandlerFunc {
+func Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// Get login details from request body
@@ -27,7 +29,11 @@ func Login(store storage.Storage) http.HandlerFunc {
 			return
 		}
 
-		safeLogin, err := app.Login(store, &loginUser)
+		// Get store and config from request context
+		store := r.Context().Value(utils.CTX_STORE).(storage.Storage)
+		config := r.Context().Value(utils.CTX_CONFIG).(*config.Config)
+
+		safeLogin, err := app.Login(store, config, &loginUser)
 
 		if err != nil {
 			RespondWithError(w, http.StatusForbidden, err.Error())

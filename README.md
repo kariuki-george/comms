@@ -5,6 +5,8 @@ This is a clone of the intercom or tawk.
 It doesn’t have ai integration; rather, a live agent will communicate with a user.
 
 
+[Postman Collection](https://www.postman.com/kariukigeorge/workspace/comms/overview)
+
 # Feature story
 
 

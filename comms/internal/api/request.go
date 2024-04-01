@@ -21,7 +21,7 @@ func parseBody[T interface{}](w http.ResponseWriter, r *http.Request, d *T, loca
 
 	if err != nil {
 		log.Debug().Msg(fmt.Sprintf("[%s]: Failed to read request body %s", location, err.Error()))
-		RespondWithError(w, http.StatusBadRequest, "failed to read the body")
+		RespondWithError(w, http.StatusBadRequest, "something went wrong")
 		return errors.New("err")
 	}
 
@@ -29,7 +29,7 @@ func parseBody[T interface{}](w http.ResponseWriter, r *http.Request, d *T, loca
 
 	if err != nil {
 		log.Debug().Msg(fmt.Sprintf("[%s]: Failed to read request body %s", location, err.Error()))
-		RespondWithError(w, http.StatusBadRequest, "failed to read the body")
+		RespondWithError(w, http.StatusBadRequest, "something went wrong")
 		return errors.New("err")
 	}
 

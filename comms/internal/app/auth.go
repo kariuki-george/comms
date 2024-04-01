@@ -1,7 +1,9 @@
 package app
 
 import (
+	"comms/internal/config"
 	"comms/internal/storage"
+	"comms/internal/utils"
 	"comms/model"
 	"crypto/rand"
 	"crypto/subtle"
@@ -11,7 +13,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/argon2"
 )
@@ -24,7 +25,7 @@ type argonParams struct {
 	keyLength   uint32
 }
 
-func Login(store storage.Storage, loginUser *model.LoginUser) (*model.SafeLogin, error) {
+func Login(store storage.Storage, config *config.Config, loginUser *model.LoginUser) (*model.SafeLogin, error) {
 	// Get user from db
 
 	user, err := store.User().GetUserByEmail(loginUser.Email)
@@ -46,7 +47,10 @@ func Login(store storage.Storage, loginUser *model.LoginUser) (*model.SafeLogin,
 	var safeLogin model.SafeLogin
 
 	// Create a jwt token
-	tokenString, err := generateJWT(int(user.ID), user.Email)
+	// TODO - Fix secret
+	tokenString, err := utils.GenerateJWT(utils.JWTClaims{UserId: int(user.ID),
+		Name:  user.Name,
+		Email: user.Email, ExpiresAt: time.Now().Add(24 * time.Hour), Nbf: time.Now(), IssuedAt: time.Now(), Issuer: "COMMS-AUTH", Subject: "AUTH", Audience: "AUTH"}, []byte(config.Auth.JwtSecret))
 	if err != nil {
 		log.Error().Msg("[AUTH]: Failed to create JWT" + err.Error())
 		return nil, errors.New("failed to login")
@@ -54,26 +58,35 @@ func Login(store storage.Storage, loginUser *model.LoginUser) (*model.SafeLogin,
 
 	safeLogin.AuthJWT = tokenString
 	safeLogin.User.Email = user.Email
-	safeLogin.User.Id = int(user.ID)
+	safeLogin.User.Id = user.ID
 	safeLogin.User.Name = user.Name
 
 	return &safeLogin, nil
 
 }
 
-func generateJWT(userId int, email string) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId":    userId,
-		"userEmail": email,
-		"nbf":       time.Now().Unix(),
-	})
-	// TODO: ADDED BETTER SEC
-	tokenString, err := token.SignedString([]byte("hmacSampleSecret"))
+func ValidateAuth(config *config.Config, token string) (*model.SafeUser, error) {
+	var user model.SafeUser
+
+	// Get claims from jwt
+	claims, err := utils.ValidateJWT(token, []byte([]byte(config.Auth.JwtSecret)))
 
 	if err != nil {
-		return "", err
+		log.Debug().Msg("[AUTH]: Auth failed " + err.Error())
+		return nil, errors.New("authentication failed")
 	}
-	return tokenString, nil
+
+	// Check expiry
+
+	if claims.ExpiresAt.Before(time.Now()) {
+		return nil, errors.New("authentication failed")
+	}
+
+	user.Id = uint(claims.UserId)
+	user.Email = claims.Email
+	user.Name = claims.Name
+
+	return &user, nil
 
 }
 

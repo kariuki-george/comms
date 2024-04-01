@@ -4,10 +4,11 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	Name  string `json:"name"`
-	Email string `json:"email" gorm:"unique"`
-
-	Password string `json:"password"`
+	Name           string
+	Email          string `gorm:"unique"`
+	Orgs           []Org
+	UserPermission []UserPermission
+	Password       string
 }
 
 type CreateUser struct {
@@ -19,5 +20,5 @@ type CreateUser struct {
 type SafeUser struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
-	Id    int    `json:"id"`
+	Id    uint   `json:"id"`
 }

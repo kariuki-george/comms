@@ -42,11 +42,13 @@ func (impl *UsersImpl) CreateUser(newUser *model.CreateUser) (*model.SafeUser, e
 
 	}
 
+	safeUser.Id = user.ID
+
 	return &safeUser, nil
 
 }
 
-func (impl *UsersImpl) GetUserById(userId int) (*model.User, error) {
+func (impl *UsersImpl) GetUserById(userId uint) (*model.User, error) {
 
 	var user model.User
 

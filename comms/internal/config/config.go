@@ -21,9 +21,14 @@ type database struct {
 	Dsn string
 }
 
+type auth struct {
+	JwtSecret string
+}
+
 type Config struct {
 	Server   serverConfig
 	Database database
+	Auth     auth
 	// Redis  redisConfig
 }
 
@@ -49,7 +54,9 @@ func Init() *Config {
 			Timezone: viper.Get("TIMEZONE").(string),
 			ENV:      viper.Get("ENV").(string),
 		},
-		Database: database{Dsn: viper.Get("POSTGRES_DSN").(string)},
+		Database: database{Dsn: viper.Get("POSTGRES_DSN").(string)}, Auth: auth{
+			JwtSecret: viper.Get("AUTHJWTSECRET").(string),
+		},
 		// Redis: redisConfig{
 		// 	Url: viper.Get("REDIS_URL").(string),
 		// },

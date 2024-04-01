@@ -1,0 +1,11 @@
+{
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "\\\\wsl.localhost\\Ubuntu\\home\\thuo\\projects\\comms\\comms\\comms.db",
+            "name": "comms"
+        }
+    ]
+}

@@ -31,6 +31,10 @@ func RespondWithErrors(w http.ResponseWriter, code int, message string, errors [
 	RespondWithJSON(w, code, ErrorResponseDTO{Code: code, Status: "Error", Message: message, Errors: errors})
 }
 
+func RespondWithPermissionsError(w http.ResponseWriter) {
+	RespondWithError(w, http.StatusForbidden, "You don't have permission to perform that operation")
+}
+
 // RespondWithJSON write json
 func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)

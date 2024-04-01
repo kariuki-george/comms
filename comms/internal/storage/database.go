@@ -11,8 +11,10 @@ import (
 )
 
 type Database struct {
-	db   *gorm.DB
-	user UsersRepo
+	db          *gorm.DB
+	user        UsersRepo
+	org         OrgsRepo
+	permissions PermissionsRepo
 }
 
 func InitDB(config *config.Config) *Database {
@@ -36,11 +38,13 @@ func InitDB(config *config.Config) *Database {
 	}
 
 	// Automigrate tables
-	database.db.AutoMigrate(&model.User{})
+	database.db.AutoMigrate(&model.User{}, &model.Org{}, &model.Permission{}, &model.UserPermission{})
 
 	// Match interfaces and impl
 
 	database.user = NewUsersImpl(database.db)
+	database.org = NewOrgsImpl(database.db)
+	database.permissions = NewPermissionsImpl(database.db)
 
 	return &database
 
@@ -49,4 +53,12 @@ func InitDB(config *config.Config) *Database {
 func (db *Database) User() UsersRepo {
 
 	return db.user
+}
+
+func (db *Database) Orgs() OrgsRepo {
+	return db.org
+}
+
+func (db *Database) Permissions() PermissionsRepo {
+	return db.permissions
 }

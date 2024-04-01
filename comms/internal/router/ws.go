@@ -2,7 +2,6 @@ package router
 
 import (
 	"comms/internal/api"
-	"comms/internal/config"
 	"comms/model"
 	"errors"
 	"net/http"
@@ -26,7 +25,7 @@ type WSManager struct {
 	handlers map[string]api.EventHandler
 }
 
-func NewWSManager(config *config.Config) *WSManager {
+func NewWSManager() *WSManager {
 	wsManager := &WSManager{
 		clients:  make(ClientList),
 		handlers: make(map[string]api.EventHandler),

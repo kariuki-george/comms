@@ -14,5 +14,5 @@ type SendMessageEvent struct {
 
 type EmitterEvent struct {
 	Event  Event `json:"event"`
-	UserId int   `json:"userId"`
+	UserId uint  `json:"userId"`
 }
