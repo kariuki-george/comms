@@ -20,7 +20,7 @@ func NewPermissionsImpl(db *gorm.DB) *PermissionsImpl {
 
 func (impl *PermissionsImpl) CreatePermissions() {
 
-	var permissions = []model.Permission{{Asset: "Users", Action: "Add"}, {Asset: "Permissions", Action: "Assign"}, {Asset: "Permissions", Action: "Delete"}, {Asset: "Chat", Action: "Join"}, {Asset: "Chat", Action: "Close"}, {Asset: "Permissions", Action: "Read"}}
+	var permissions = []model.Permission{{Asset: "Users", Action: "Add"}, {Asset: "Permissions", Action: "Assign"}, {Asset: "Permissions", Action: "Delete"}, {Asset: "Chat", Action: "Join"}, {Asset: "Chat", Action: "Close"}, {Asset: "Permissions", Action: "Read"}, {Asset: "Chatbots", Action: "Create"}, {Asset: "Chatbots", Action: "Get"}, {Asset: "Chatbots", Action: "Delete"}}
 
 	for _, permission := range permissions {
 		result := impl.db.Create(&permission)

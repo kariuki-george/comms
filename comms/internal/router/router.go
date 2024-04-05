@@ -78,16 +78,27 @@ func (apiRouter *Router) initRoutes() {
 	authedRouter.HandleFunc("/orgs", api.CreateOrg()).Methods(http.MethodPost, http.MethodOptions)
 	authedRouter.HandleFunc("/orgs", api.GetOwnedOrgs()).Methods(http.MethodGet, http.MethodOptions)
 
+	// Check organization
+	var authedOrgRouter = apiRouter.router.PathPrefix("/api").Subrouter()
+	authedOrgRouter.Use(middleware.AuthMiddleware)
+	authedOrgRouter.Use(middleware.OrgMiddleware)
+
 	// Permissions
-	authedRouter.HandleFunc("/permissions", api.GetPermissions()).Methods(http.MethodGet, http.MethodOptions)
-	authedRouter.HandleFunc("/permissions/assign", api.AssignPermission()).Methods(http.MethodPost, http.MethodOptions)
-	authedRouter.HandleFunc("/permissions/delete", api.DeleteUserPermission()).Methods(http.MethodPost, http.MethodOptions)
-	authedRouter.HandleFunc("/permissions/user", api.GetUserPermissionsByUserId()).Methods(http.MethodGet, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/permissions", api.GetPermissions()).Methods(http.MethodGet, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/permissions/assign", api.AssignPermission()).Methods(http.MethodPost, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/permissions/delete", api.DeleteUserPermission()).Methods(http.MethodPost, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/permissions/user", api.GetUserPermissionsByUserId()).Methods(http.MethodGet, http.MethodOptions)
+
+	// Chatbots
+	authedOrgRouter.HandleFunc("/{orgId}/chatbots", api.CreateChatbot()).Methods(http.MethodPost, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/chatbots/{chatbotKey}", api.FindChatbot()).Methods(http.MethodGet, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/chatbots", api.FindAllChatbots()).Methods(http.MethodGet, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/chatbots/{chatbotId}", api.DeleteChatbot()).Methods(http.MethodDelete, http.MethodOptions)
 
 	// WS
 
 	wsManager := NewWSManager()
 
-	authedRouter.HandleFunc("/ws", wsManager.serveWS()).Methods(http.MethodGet, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/ws", wsManager.serveWS()).Methods(http.MethodGet, http.MethodOptions)
 
 }

@@ -7,6 +7,7 @@ type Org struct {
 	Name            string `gorm:"uniqueIndex:idx_org"`
 	UserID          uint   `gorm:"uniqueIndex:idx_org"`
 	UserPermissions []UserPermission
+	Chatbots        []Chatbot
 }
 
 type CreateOrg struct {

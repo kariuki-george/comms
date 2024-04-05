@@ -15,6 +15,7 @@ type Database struct {
 	user        UsersRepo
 	org         OrgsRepo
 	permissions PermissionsRepo
+	chatbots    ChatbotsRepo
 }
 
 func InitDB(config *config.Config) *Database {
@@ -38,13 +39,14 @@ func InitDB(config *config.Config) *Database {
 	}
 
 	// Automigrate tables
-	database.db.AutoMigrate(&model.User{}, &model.Org{}, &model.Permission{}, &model.UserPermission{})
+	database.db.AutoMigrate(&model.User{}, &model.Org{}, &model.Permission{}, &model.UserPermission{}, &model.Chatbot{})
 
 	// Match interfaces and impl
 
 	database.user = NewUsersImpl(database.db)
 	database.org = NewOrgsImpl(database.db)
 	database.permissions = NewPermissionsImpl(database.db)
+	database.chatbots = NewChatbotImpl(database.db)
 
 	return &database
 
@@ -61,4 +63,8 @@ func (db *Database) Orgs() OrgsRepo {
 
 func (db *Database) Permissions() PermissionsRepo {
 	return db.permissions
+}
+
+func (db *Database) Chatbots() ChatbotsRepo {
+	return db.chatbots
 }

@@ -20,3 +20,10 @@ type PermissionsRepo interface {
 	DeleteUserPermission(permissionId uint, orgId uint) error
 	GetUserPermissionsByUserId(userId uint, orgId uint) (*[]model.SafeUserPermission, error)
 }
+
+type ChatbotsRepo interface {
+	CreateChatbot(chatbot *model.CreateChatbot) (*model.SafeChatbot, error)
+	FindChatbot(chatbotKey string) (*model.SafeChatbot, error)
+	FindAllChatbots(orgId uint) (*[]model.SafeChatbot, error)
+	DeleteChatbot(chatbotId uint, orgId uint) error
+}
