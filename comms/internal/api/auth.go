@@ -2,8 +2,6 @@ package api
 
 import (
 	"comms/internal/app"
-	"comms/internal/config"
-	"comms/internal/storage"
 	"comms/internal/utils"
 	"comms/model"
 	"net/http"
@@ -30,8 +28,8 @@ func Login() http.HandlerFunc {
 		}
 
 		// Get store and config from request context
-		store := r.Context().Value(utils.CTX_STORE).(storage.Storage)
-		config := r.Context().Value(utils.CTX_CONFIG).(*config.Config)
+		store := utils.GetStore(r.Context())
+		config := utils.GetConfig(r.Context())
 
 		safeLogin, err := app.Login(store, config, &loginUser)
 

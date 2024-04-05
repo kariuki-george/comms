@@ -27,8 +27,8 @@ func CreateOrg() http.HandlerFunc {
 
 		// Get context
 
-		safeUser := r.Context().Value(utils.CTX_SAFEUSER).(*model.SafeUser)
-		store := r.Context().Value(utils.CTX_STORE).(storage.Storage)
+		store := utils.GetStore(r.Context())
+		safeUser := utils.GetSafeUser(r.Context())
 
 		safeOrg, err := app.CreateOrg(store, createOrg, safeUser.Id)
 		if err != nil {

@@ -1,5 +1,12 @@
 package utils
 
+import (
+	"comms/internal/config"
+	"comms/internal/storage"
+	"comms/model"
+	"context"
+)
+
 type requestContextName string
 
 const (
@@ -7,3 +14,15 @@ const (
 	CTX_STORE    requestContextName = "store"
 	CTX_SAFEUSER requestContextName = "safeUser"
 )
+
+func GetConfig(ctx context.Context) *config.Config {
+	return ctx.Value(CTX_CONFIG).(*config.Config)
+}
+
+func GetStore(ctx context.Context) storage.Storage {
+	return ctx.Value(CTX_STORE).(storage.Storage)
+}
+
+func GetSafeUser(ctx context.Context) *model.SafeUser {
+	return ctx.Value(CTX_SAFEUSER).(*model.SafeUser)
+}

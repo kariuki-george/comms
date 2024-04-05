@@ -2,7 +2,6 @@ package api
 
 import (
 	"comms/internal/app"
-	"comms/internal/storage"
 	"comms/internal/utils"
 	"comms/model"
 	"net/http"
@@ -13,7 +12,7 @@ func GetPermissions() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Get storage
 
-		var store = r.Context().Value(utils.CTX_STORE).(storage.Storage)
+		store := utils.GetStore(r.Context())
 
 		safePermissions, err := app.GetPermissions(store)
 
@@ -43,8 +42,8 @@ func AssignPermission() http.HandlerFunc {
 
 		// Get storage
 
-		var store = r.Context().Value(utils.CTX_STORE).(storage.Storage)
-		var safeUser = r.Context().Value(utils.CTX_SAFEUSER).(*model.SafeUser)
+		store := utils.GetStore(r.Context())
+		safeUser := utils.GetSafeUser(r.Context())
 
 		// Check permissions
 
@@ -90,8 +89,8 @@ func GetUserPermissionsByUserId() http.HandlerFunc {
 
 		// Get storage
 
-		var store = r.Context().Value(utils.CTX_STORE).(storage.Storage)
-		var safeUser = r.Context().Value(utils.CTX_SAFEUSER).(*model.SafeUser)
+		store := utils.GetStore(r.Context())
+		safeUser := utils.GetSafeUser(r.Context())
 
 		// Check permissions
 
@@ -130,8 +129,8 @@ func DeleteUserPermission() http.HandlerFunc {
 
 		// Get storage
 
-		var store = r.Context().Value(utils.CTX_STORE).(storage.Storage)
-		var safeUser = r.Context().Value(utils.CTX_SAFEUSER).(*model.SafeUser)
+		store := utils.GetStore(r.Context())
+		safeUser := utils.GetSafeUser(r.Context())
 
 		// Check permissions
 		// Cannot delete self permission
