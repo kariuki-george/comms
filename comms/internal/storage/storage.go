@@ -5,4 +5,5 @@ type Storage interface {
 	Orgs() OrgsRepo
 	Permissions() PermissionsRepo
 	Chatbots() ChatbotsRepo
+	Chatrooms() ChatroomsRepo
 }

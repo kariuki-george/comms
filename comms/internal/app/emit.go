@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func emitEvent(event model.EmitterEvent) {
+func emitEvent(event model.Event) {
 
 	fmt.Println("called")
 }

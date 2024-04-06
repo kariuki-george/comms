@@ -1,4 +1,4 @@
-package router
+package api
 
 import (
 	"comms/model"
@@ -16,25 +16,33 @@ var (
 )
 
 // A map of userId and client details
-// One will use the userId to get their client
 
-type ClientList map[uint]*Client
+type ClientList map[string]*Client
 
 type Client struct {
 	connection *websocket.Conn
 	wsmanager  *WSManager
-	userId     uint
+	identifier string
 
 	// Write channel
 	wchan chan model.Event
 }
 
-func NewClient(conn *websocket.Conn, wsmanager *WSManager, userId uint) *Client {
+/*
+Identifier will be used to identify who owns a client
+
+- Employee -> orgId-userId
+- Anonymous -> orgId-userId-chatroom
+
+*/
+
+func NewClient(conn *websocket.Conn, wsmanager *WSManager, identifier string) *Client {
+
 	return &Client{
 		connection: conn,
 		wsmanager:  wsmanager,
 		wchan:      make(chan model.Event),
-		userId:     userId,
+		identifier: identifier,
 	}
 }
 
@@ -76,13 +84,14 @@ func (client *Client) readMessages() {
 		log.Debug().Msg(fmt.Sprintf("[WS]: MessageType:%d Payload:%s", messageType, string(payload)))
 
 		var event model.Event
+		event.Identifier = client.identifier
 
 		if err := json.Unmarshal(payload, &event); err != nil {
 			log.Error().Msg("[WS]: " + err.Error())
 			break //Reconsider not to close the connection
 		}
 
-		if err := client.wsmanager.routeEvent(event, client); err != nil {
+		if err := client.wsmanager.routeEvent(event); err != nil {
 			log.Error().Msg("[WS]: Error handling the message: " + err.Error())
 		}
 

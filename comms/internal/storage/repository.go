@@ -27,3 +27,11 @@ type ChatbotsRepo interface {
 	FindAllChatbots(orgId uint) (*[]model.SafeChatbot, error)
 	DeleteChatbot(chatbotId uint, orgId uint) error
 }
+
+// OrgIds aren't required but are a good practice for multitenancy distinction
+type ChatroomsRepo interface {
+	CreateChatroom(chatroom *model.CreateChatroom, orgId uint) (*model.SafeChatroom, error)
+	JoinChatroom(chatroomId uint, userId uint, userName string, orgId uint) (*model.SafeChatroom, error)
+	GetChatroomsByUserId(userId uint, orgId uint) (*[]model.SafeChatroom, error)
+	CloseChatroom(chatroomId uint, orgId uint) error
+}

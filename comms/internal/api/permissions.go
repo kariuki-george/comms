@@ -53,7 +53,7 @@ func AssignPermission() http.HandlerFunc {
 			RespondWithError(w, http.StatusForbidden, "Cannot set own permissions")
 			return
 		}
-		allowed := app.CheckPermissions(store, []model.SafePermission{{Asset: "Chat", Action: "Join"}}, safeUser.Id, newUserPermission.OrgID)
+		allowed := app.CheckPermissions(r.Context(), []model.SafePermission{{Asset: "Chat", Action: "Join"}})
 
 		if !allowed {
 			RespondWithPermissionsError(w)
@@ -94,7 +94,7 @@ func GetUserPermissionsByUserId() http.HandlerFunc {
 
 		// Check permissions
 
-		allowed := app.CheckPermissions(store, []model.SafePermission{{Asset: "Permissions", Action: "Read"}}, safeUser.Id, uint(orgId))
+		allowed := app.CheckPermissions(r.Context(), []model.SafePermission{{Asset: "Permissions", Action: "Read"}})
 
 		if !allowed {
 			RespondWithPermissionsError(w)
@@ -139,7 +139,7 @@ func DeleteUserPermission() http.HandlerFunc {
 			RespondWithError(w, http.StatusForbidden, "Cannot delete own permissions")
 			return
 		}
-		allowed := app.CheckPermissions(store, []model.SafePermission{{Asset: "Permissions", Action: "Delete"}}, safeUser.Id, deleteUserPermission.OrgID)
+		allowed := app.CheckPermissions(r.Context(), []model.SafePermission{{Asset: "Permissions", Action: "Delete"}})
 
 		if !allowed {
 			RespondWithPermissionsError(w)

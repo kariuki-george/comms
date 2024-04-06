@@ -3,7 +3,6 @@ package middleware
 import (
 	"comms/internal/api"
 	"comms/internal/app"
-	"comms/internal/config"
 	"comms/internal/utils"
 	"context"
 	"net/http"
@@ -15,9 +14,9 @@ func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get auth token from headers
 
-		authHeader := r.Header.Get("aid")
+		authToken := r.Header.Get("aid")
 
-		if authHeader == "" {
+		if authToken == "" {
 			log.Debug().Msg("[AUTH]: No authentication token provided")
 			api.RespondWithError(w, http.StatusForbidden, "authentication failed")
 			return
@@ -25,11 +24,9 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		// Authenticate token
 
-		// Get config from request
+		config := utils.GetConfig(r.Context())
 
-		config := r.Context().Value(utils.CTX_CONFIG).(*config.Config)
-
-		safeUser, err := app.ValidateAuth(config, authHeader)
+		safeUser, err := app.ValidateAuth(config, authToken)
 
 		if err != nil {
 			api.RespondWithError(w, http.StatusForbidden, err.Error())

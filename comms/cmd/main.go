@@ -1,6 +1,7 @@
 package main
 
 import (
+	"comms/internal/api"
 	"comms/internal/config"
 	"comms/internal/router"
 	"comms/internal/storage"
@@ -44,12 +45,15 @@ func main() {
 
 	database := storage.InitDB(config)
 
+	// Start Websocket manager
+	wsm := api.NewWSManager()
+
 	// Setup Server
 	log.Info().Msg(fmt.Sprintf("[COMMS]: Starting HTTP server on port:%d", config.Server.Port))
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%d", config.Server.Port),
-		Handler: router.InitRouter(config, database),
+		Handler: router.InitRouter(config, database, wsm),
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,

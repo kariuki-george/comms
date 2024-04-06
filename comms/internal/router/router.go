@@ -16,14 +16,16 @@ type Router struct {
 	router  *mux.Router
 	config  *config.Config
 	storage storage.Storage
+	wsm     *api.WSManager
 }
 
-func InitRouter(config *config.Config, storage storage.Storage) *Router {
+func InitRouter(config *config.Config, storage storage.Storage, wsm *api.WSManager) *Router {
 
 	router := &Router{
 		router:  mux.NewRouter(),
 		config:  config,
 		storage: storage,
+		wsm:     wsm,
 	}
 	router.initRoutes()
 
@@ -95,10 +97,15 @@ func (apiRouter *Router) initRoutes() {
 	authedOrgRouter.HandleFunc("/{orgId}/chatbots", api.FindAllChatbots()).Methods(http.MethodGet, http.MethodOptions)
 	authedOrgRouter.HandleFunc("/{orgId}/chatbots/{chatbotId}", api.DeleteChatbot()).Methods(http.MethodDelete, http.MethodOptions)
 
+	// Chatrooms
+	authedOrgRouter.HandleFunc("/{orgId}/chatrooms", api.CreateChatroom()).Methods(http.MethodPost, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/chatrooms/{chatroomId}/join", api.JoinChatroom()).Methods(http.MethodPost, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/chatrooms", api.GetChatroomsByUserId()).Methods(http.MethodGet, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/chatrooms/{chatroomId}/close", api.CloseChatroom()).Methods(http.MethodPost, http.MethodOptions)
+
 	// WS
 
-	wsManager := NewWSManager()
-
-	authedOrgRouter.HandleFunc("/{orgId}/ws", wsManager.serveWS()).Methods(http.MethodGet, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/ws/{chatroomId}", apiRouter.wsm.ServeWS()).Methods(http.MethodGet, http.MethodOptions)
+	authedOrgRouter.HandleFunc("/{orgId}/ws", apiRouter.wsm.ServeWS()).Methods(http.MethodGet, http.MethodOptions)
 
 }

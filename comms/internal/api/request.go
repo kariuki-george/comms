@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"io"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 )
 
@@ -65,4 +67,22 @@ func validateStructInput[T interface{}](w http.ResponseWriter, input *T) error {
 		RespondWithErrors(w, http.StatusBadRequest, "Validation Failed", e)
 	}
 	return err
+}
+
+func parseIntUrlParam(r *http.Request, name string) (int, error) {
+	var params = mux.Vars(r)
+
+	var nameString = params[name]
+
+	if len(nameString) == 0 {
+		return 0, errors.New(fmt.Sprintf("Invalid %s provided", name))
+
+	}
+	nameInt, err := strconv.ParseInt(nameString, 10, 64)
+
+	if err != nil {
+		return 0, errors.New(fmt.Sprintf("Invalid %s provided", name))
+	}
+	return int(nameInt), nil
+
 }

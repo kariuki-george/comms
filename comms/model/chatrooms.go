@@ -16,7 +16,7 @@ type Chatroom struct {
 	Status        string // Checkout enum
 	Location      string
 	AgentJoinedAt time.Time
-	ChatbotID     int
+	ChatbotID     uint
 	OrgID         uint //Not needed though
 	Messages      []Message
 }
@@ -27,4 +27,20 @@ type Message struct {
 	SentAt     time.Time
 	ReadAt     time.Time
 	ChatroomId uint
+}
+
+type CreateChatroom struct {
+	ChatbotID uint   `json:"chatbotId" validate:"required"`
+	UserEmail string `json:"email" validate:"required"`
+	UserName  string `json:"name" validate:"required"`
+}
+
+type SafeChatroom struct {
+	Id          uint   `json:"chatroomId"`
+	ChatbotName string `jsom:"chatbotName"`
+}
+
+type CreateChatroomResponse struct {
+	Chatroom  SafeChatroom `json:"chatroom"`
+	AuthToken string       `json:"authToken"`
 }

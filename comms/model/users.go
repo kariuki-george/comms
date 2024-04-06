@@ -17,6 +17,7 @@ type CreateUser struct {
 	Password string `json:"password" validate:"required"`
 }
 
+// Anonymous users will have the ID value as 0
 type SafeUser struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`

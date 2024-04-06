@@ -30,11 +30,10 @@ func CreateChatbot() http.HandlerFunc {
 		}
 
 		store := utils.GetStore(r.Context())
-		safeUser := utils.GetSafeUser(r.Context())
 		orgId := utils.GetOrgId(r.Context())
 
 		// Check permissions permissions
-		isValid := app.CheckPermissions(store, []model.SafePermission{{Asset: "Chatbots", Action: "Create"}}, safeUser.Id, orgId)
+		isValid := app.CheckPermissions(r.Context(), []model.SafePermission{{Asset: "Chatbots", Action: "Create"}})
 
 		if !isValid {
 			RespondWithPermissionsError(w)
@@ -75,11 +74,9 @@ func FindChatbot() http.HandlerFunc {
 		}
 
 		store := utils.GetStore(r.Context())
-		safeUser := utils.GetSafeUser(r.Context())
-		orgId := utils.GetOrgId(r.Context())
 
 		// Check permissions permissions
-		isValid := app.CheckPermissions(store, []model.SafePermission{{Asset: "Chatbots", Action: "Get"}}, safeUser.Id, orgId)
+		isValid := app.CheckPermissions(r.Context(), []model.SafePermission{{Asset: "Chatbots", Action: "Get"}})
 
 		if !isValid {
 			RespondWithPermissionsError(w)
@@ -102,10 +99,9 @@ func FindAllChatbots() http.HandlerFunc {
 		orgId := utils.GetOrgId(r.Context())
 
 		store := utils.GetStore(r.Context())
-		safeUser := utils.GetSafeUser(r.Context())
 
 		// Check permissions permissions
-		isValid := app.CheckPermissions(store, []model.SafePermission{{Asset: "Chatbots", Action: "Get"}}, safeUser.Id, orgId)
+		isValid := app.CheckPermissions(r.Context(), []model.SafePermission{{Asset: "Chatbots", Action: "Get"}})
 
 		if !isValid {
 			RespondWithPermissionsError(w)
@@ -142,10 +138,9 @@ func DeleteChatbot() http.HandlerFunc {
 		orgId := utils.GetOrgId(r.Context())
 
 		store := utils.GetStore(r.Context())
-		safeUser := utils.GetSafeUser(r.Context())
 
 		// Check permissions permissions
-		isValid := app.CheckPermissions(store, []model.SafePermission{{Asset: "Chatbots", Action: "Delete"}}, safeUser.Id, orgId)
+		isValid := app.CheckPermissions(r.Context(), []model.SafePermission{{Asset: "Chatbots", Action: "Delete"}})
 
 		if !isValid {
 			RespondWithPermissionsError(w)

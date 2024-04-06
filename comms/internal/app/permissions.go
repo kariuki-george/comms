@@ -2,7 +2,9 @@ package app
 
 import (
 	"comms/internal/storage"
+	"comms/internal/utils"
 	"comms/model"
+	"context"
 )
 
 func GetPermissions(store storage.Storage) (*[]model.SafePermission, error) {
@@ -20,8 +22,13 @@ func GetUserPermissionsByUserId(store storage.Storage, userId uint, orgId uint) 
 }
 
 // CheckPermissions checks if a user has the needed permissions.
-func CheckPermissions(store storage.Storage, requiredPermissions []model.SafePermission, userId uint, orgId uint) bool {
-	userPermissions, err := GetUserPermissionsByUserId(store, userId, orgId)
+func CheckPermissions(ctx context.Context, requiredPermissions []model.SafePermission) bool {
+
+	store := utils.GetStore(ctx)
+	orgId := utils.GetOrgId(ctx)
+	safeUser := utils.GetSafeUser(ctx)
+
+	userPermissions, err := GetUserPermissionsByUserId(store, safeUser.Id, orgId)
 	if err != nil {
 		return false
 	}
