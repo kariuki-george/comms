@@ -117,6 +117,8 @@ func (client *Client) writeMessages() {
 
 	ticker := time.NewTicker(pingInterval)
 
+	defer ticker.Stop()
+
 	for {
 
 		select {
